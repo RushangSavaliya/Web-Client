@@ -1,23 +1,29 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+// File: src/App.jsx
 
-export default function App() {
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
-    <Router>
+    <div className="min-h-screen bg-base-200">
+      <Navbar isLoggedIn={isLoggedIn} onLogout={() => setIsLoggedIn(false)} />
       <Routes>
-        {/* Auth Pages */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-
-        {/* Catch-all (invalid routes) */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/login"
+          element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+        />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
-    </Router>
+    </div>
   );
-}
+};
+
+export default App;

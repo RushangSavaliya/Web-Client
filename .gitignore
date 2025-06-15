@@ -25,3 +25,5 @@ dist-ssr
 
 # Extra
 Notes
+.env
+.vscode

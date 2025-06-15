@@ -1,24 +1,7 @@
-:root {
-  --bg: #263238;
-  --fg: #B0BEC5;
-  --text: #607D8B;
-  --btn-bg: #2E3C43;
-  --btn-active: #314549;
-  --accent: #009688;
-  --error: #ff5370;
-  --input-bg: #32424A;
-  --border: #2A373E;
-}
+/* File: src/index.css */
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@import "tailwindcss";
 
-body {
-  font-family: system-ui, sans-serif;
-  background-color: var(--bg);
-  color: var(--fg);
-  line-height: 1.5;
+@plugin "daisyui" {
+  themes: dim --default;
 }
