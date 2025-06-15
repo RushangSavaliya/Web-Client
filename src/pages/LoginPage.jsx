@@ -2,77 +2,65 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axiosInstance from "../lib/axios";
 
 function LoginPage({ onLogin }) {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
+  const [form, setForm] = useState({ identifier: "", password: "" });
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(form),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        onLogin(data);
+      const res = await axiosInstance.post("/login", form);
+      const { token } = res.data;
+      if (token) {
+        localStorage.setItem("token", token);
+        onLogin();
       } else {
-        const err = await res.json();
-        alert(err.message || "Login failed");
+        alert("Login failed: Token missing");
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Login failed");
+    } catch (err) {
+      alert(err.response?.data?.error || "Login failed");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-base-200">
+    <div className="min-h-screen flex items-center justify-center bg-base-200">
       <form
+        className="card bg-base-100 shadow-md w-full max-w-sm p-6 space-y-4"
         onSubmit={handleSubmit}
-        className="card w-full max-w-sm shadow-md bg-base-100 p-6 space-y-4"
       >
         <h2 className="text-2xl font-bold text-center">Login</h2>
 
         <div className="form-control">
-          <label className="label">Email</label>
+          <label className="label">Email or Username</label>
           <input
-            type="email"
-            name="email"
+            type="text"
+            name="identifier"
             className="input input-bordered"
-            value={form.email}
+            value={form.identifier}
             onChange={handleChange}
             required
           />
         </div>
 
-        <div className="form-control relative">
+        <div className="form-control">
           <label className="label">Password</label>
           <input
-            type={showPassword ? "text" : "password"}
+            type="password"
             name="password"
-            className="input input-bordered pr-10"
+            className="input input-bordered"
             value={form.password}
             onChange={handleChange}
             required
           />
-          <span
-            className="absolute right-3 top-10 text-sm cursor-pointer select-none"
-            onClick={() => setShowPassword((prev) => !prev)}
-          >
-            {showPassword ? "Hide" : "Show"}
-          </span>
         </div>
 
-        <button className="btn btn-primary w-full mt-2" type="submit">
+        <button type="submit" className="btn btn-primary w-full mt-2">
           Login
         </button>
 

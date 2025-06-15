@@ -1,91 +1,68 @@
 // File: src/pages/RegisterPage.jsx
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../lib/axios";
 
 function RegisterPage() {
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(form),
-        }
-      );
-
-      if (res.ok) {
-        alert("Registration successful!");
-        window.location.href = "/login";
-      } else {
-        const data = await res.json();
-        alert(data.message || "Registration failed");
-      }
+      await axiosInstance.post("/register", form);
+      alert("Registration successful!");
+      navigate("/login");
     } catch (err) {
-      alert("Registration failed");
-      console.error("Registration error:", err);
+      const errorMsg = err.response?.data?.error || "Registration failed";
+      alert(errorMsg);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-base-200">
+    <div className="min-h-screen flex items-center justify-center bg-base-200">
       <form
+        className="card w-full max-w-sm bg-base-100 shadow-md p-6 space-y-4"
         onSubmit={handleSubmit}
-        className="card w-full max-w-sm shadow-md bg-base-100 p-6 space-y-4"
       >
         <h2 className="text-2xl font-bold text-center">Register</h2>
 
-        <div className="form-control">
-          <label className="label">Username</label>
-          <input
-            type="text"
-            name="username"
-            className="input input-bordered"
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <FormInput
+          label="Username"
+          type="text"
+          name="username"
+          value={form.username}
+          onChange={handleChange}
+        />
 
-        <div className="form-control">
-          <label className="label">Email</label>
-          <input
-            type="email"
-            name="email"
-            className="input input-bordered"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <FormInput
+          label="Email"
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+        />
 
-        <div className="form-control relative">
-          <label className="label">Password</label>
-          <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            className="input input-bordered pr-10"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-          <span
-            className="absolute right-3 top-10 text-sm cursor-pointer select-none"
-            onClick={() => setShowPassword((prev) => !prev)}
-          >
-            {showPassword ? "Hide" : "Show"}
-          </span>
-        </div>
+        <FormInput
+          label="Password"
+          type="password"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+        />
 
         <button className="btn btn-primary w-full mt-2" type="submit">
           Register
@@ -98,6 +75,15 @@ function RegisterPage() {
           </Link>
         </p>
       </form>
+    </div>
+  );
+}
+
+function FormInput({ label, ...props }) {
+  return (
+    <div className="form-control">
+      <label className="label">{label}</label>
+      <input className="input input-bordered" required {...props} />
     </div>
   );
 }
