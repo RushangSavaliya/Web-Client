@@ -8,29 +8,37 @@ const authStore = create((set) => ({
     isLoggedIn: !!localStorage.getItem("token"),
 
     login: async (token) => {
-        if (!token) return;
+        if (!token) return false;
 
+        // 1. Optimistically persist token (so interceptor picks it up)
+        localStorage.setItem("token", token);
+        set({ token, isLoggedIn: true });
+
+        // 2. Verify session by calling /auth/me
         try {
-            localStorage.setItem("token", token);
-
-            const res = await axiosInstance.get("/auth/me", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
+            const res = await axiosInstance.get("/auth/me");
             if (res.data?.user) {
-                set({ token, isLoggedIn: true });
-            } else {
-                throw new Error("Invalid session");
+                return true;
             }
+            throw new Error("Invalid session");
         } catch {
+            // 3. Roll back on failure
             localStorage.removeItem("token");
             set({ token: null, isLoggedIn: false });
+            return false;
         }
     },
 
-    logout: () => {
-        localStorage.removeItem("token");
-        set({ token: null, isLoggedIn: false });
+    logout: async () => {
+        try {
+            // Hit backend to destroy session
+            await axiosInstance.post("/auth/logout");
+        } catch(error) {
+            console.error("Logout failed:", error);
+        } finally {
+            localStorage.removeItem("token");
+            set({ token: null, isLoggedIn: false });
+        }
     },
 }));
 

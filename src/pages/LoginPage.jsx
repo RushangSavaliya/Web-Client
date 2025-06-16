@@ -1,11 +1,12 @@
 // File: src/pages/LoginPage.jsx
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../lib/axios";
 
 function LoginPage({ onLogin }) {
   const [form, setForm] = useState({ usernameORemail: "", password: "" });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,8 +19,12 @@ function LoginPage({ onLogin }) {
       const res = await axiosInstance.post("/auth/login", form);
       const { token } = res.data;
       if (token) {
-        localStorage.setItem("token", token);
-        onLogin();
+        const success = await onLogin(token);
+        if (success) {
+          navigate("/");
+        } else {
+          alert("Session validation failed");
+        }
       } else {
         alert("Login failed: Token missing");
       }
