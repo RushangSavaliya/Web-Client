@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../lib/axios";
 
 function LoginPage({ onLogin }) {
-  const [form, setForm] = useState({ identifier: "", password: "" });
+  const [form, setForm] = useState({ usernameORemail: "", password: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,7 +15,7 @@ function LoginPage({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axiosInstance.post("/login", form);
+      const res = await axiosInstance.post("/auth/login", form);
       const { token } = res.data;
       if (token) {
         localStorage.setItem("token", token);
@@ -40,9 +40,9 @@ function LoginPage({ onLogin }) {
           <label className="label">Email or Username</label>
           <input
             type="text"
-            name="identifier"
+            name="usernameORemail"
             className="input input-bordered"
-            value={form.identifier}
+            value={form.usernameORemail}
             onChange={handleChange}
             required
           />
@@ -65,7 +65,7 @@ function LoginPage({ onLogin }) {
         </button>
 
         <p className="text-center text-sm">
-          Don&apos;t have an account?{" "}
+          Don't have an account?{" "}
           <Link to="/register" className="link link-hover text-primary">
             Register
           </Link>

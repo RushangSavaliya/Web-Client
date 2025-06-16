@@ -23,7 +23,7 @@ function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.post("/register", form);
+      await axiosInstance.post("/auth/register", form);
       alert("Registration successful!");
       navigate("/login");
     } catch (err) {

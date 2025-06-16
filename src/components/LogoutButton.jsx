@@ -5,7 +5,7 @@ import axiosInstance from "../lib/axios";
 export default function LogoutButton({ onLogout }) {
   const handleLogout = async () => {
     try {
-      const res = await axiosInstance.post("/logout");
+      const res = await axiosInstance.post("/auth/logout");
       if (res.status === 200) {
         localStorage.removeItem("token");
         onLogout();
@@ -13,7 +13,7 @@ export default function LogoutButton({ onLogout }) {
         console.error("Logout failed");
       }
     } catch (err) {
-      console.error("Logout error:", err);
+      console.error("Logout error:", err.response?.data?.error || err.message);
     }
   };
 
