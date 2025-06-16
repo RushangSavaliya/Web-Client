@@ -1,14 +1,14 @@
 // File: src/lib/axios.js
 
-import axios from 'axios';
+import axios from "axios";
+import authStore from "../store/auth.store";
 
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_SERVER_URL}/api`,
-  withCredentials: false, // Session is passed via token
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const { token } = authStore.getState(); // ✅ Zustand access
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
