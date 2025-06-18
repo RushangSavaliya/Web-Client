@@ -1,6 +1,7 @@
 // File: src/pages/LoginPage.jsx
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../lib/axios";
 
@@ -23,6 +24,13 @@ function LoginPage({ onLogin }) {
     if (loading) return; // prevent double submit
     setLoading(true);
 
+    const { usernameORemail, password } = form;
+    if (!usernameORemail || !password) {
+      toast.error("All fields are required");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await axiosInstance.post("/auth/login", form);
       const { token } = res.data;
@@ -32,15 +40,15 @@ function LoginPage({ onLogin }) {
         if (success) {
           navigate("/");
         } else {
-          alert("Session validation failed");
+          toast.error("Session validation failed");
           setLoading(false);
         }
       } else {
-        alert("Login failed: Token missing");
+        toast.error("Login failed: Token missing");
         setLoading(false);
       }
     } catch (err) {
-      alert(err.response?.data?.error || "Login failed");
+      toast.error(err.response?.data?.error || "Login failed");
       setLoading(false); // allow retry
     }
   };

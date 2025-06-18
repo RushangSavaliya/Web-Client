@@ -1,6 +1,7 @@
 // File: src/components/LogoutButton.jsx
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import axiosInstance from "../lib/axios";
 
 export default function LogoutButton({ onLogout }) {
@@ -16,11 +17,11 @@ export default function LogoutButton({ onLogout }) {
         localStorage.removeItem("token");
         onLogout();
       } else {
-        console.error("Logout failed");
+        toast.error("Logout failed");
         setLoading(false);
       }
     } catch (err) {
-      console.error("Logout error:", err.response?.data?.error || err.message);
+      toast.error("Logout error:", err.response?.data?.error || err.message);
       setLoading(false);
     }
   };

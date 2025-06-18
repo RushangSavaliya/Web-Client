@@ -1,11 +1,11 @@
 // File: src/pages/RegisterPage.jsx
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../lib/axios";
 
 function RegisterPage() {
-
   // --- States Section ---
 
   const [form, setForm] = useState({
@@ -15,7 +15,7 @@ function RegisterPage() {
   });
 
   const [loading, setLoading] = useState(false);
-  
+
   // --- End States Section ---
 
   const navigate = useNavigate();
@@ -30,8 +30,33 @@ function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
 
-    if (loading) return; // prevent spam clicks
+    const { username, email, password } = form;
+
+    // Client-side validation
+    if (!username || !email || !password) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (username.length < 3 || username.length > 20) {
+      toast.error("Username must be between 3 and 20 characters");
+      return;
+    }
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Invalid email address");
+      return;
+    }
+
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -39,7 +64,7 @@ function RegisterPage() {
       navigate("/login");
     } catch (err) {
       const errorMsg = err.response?.data?.error || "Registration failed";
-      alert(errorMsg);
+      toast.error(errorMsg);
       setLoading(false); // allow retry on failure
     }
   };
