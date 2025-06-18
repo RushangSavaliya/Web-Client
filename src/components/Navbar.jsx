@@ -13,18 +13,7 @@ export default function Navbar({ isLoggedIn, onLogout }) {
       </div>
 
       <div className="flex-none space-x-2">
-        {isLoggedIn ? (
-          <LogoutButton onLogout={onLogout} />
-        ) : (
-          <>
-            <Link to="/login" className="btn btn-sm btn-primary">
-              Login
-            </Link>
-            <Link to="/register" className="btn btn-sm btn-secondary">
-              Register
-            </Link>
-          </>
-        )}
+        {isLoggedIn && <LogoutButton onLogout={onLogout} />}
       </div>
     </div>
   );
