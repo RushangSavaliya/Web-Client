@@ -5,7 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../lib/axios";
 
 function LoginPage({ onLogin }) {
+  // --- States ---
   const [form, setForm] = useState({ usernameORemail: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  // --- End States ---
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,21 +19,29 @@ function LoginPage({ onLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (loading) return; // prevent double submit
+    setLoading(true);
+
     try {
       const res = await axiosInstance.post("/auth/login", form);
       const { token } = res.data;
+
       if (token) {
         const success = await onLogin(token);
         if (success) {
           navigate("/");
         } else {
           alert("Session validation failed");
+          setLoading(false);
         }
       } else {
         alert("Login failed: Token missing");
+        setLoading(false);
       }
     } catch (err) {
       alert(err.response?.data?.error || "Login failed");
+      setLoading(false); // allow retry
     }
   };
 
@@ -65,8 +77,12 @@ function LoginPage({ onLogin }) {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary w-full mt-2">
-          Login
+        <button
+          type="submit"
+          className="btn btn-primary w-full mt-2"
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Login"}
         </button>
 
         <p className="text-center text-sm">

@@ -5,11 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../lib/axios";
 
 function RegisterPage() {
+
+  // --- States Section ---
+
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
+  
+  // --- End States Section ---
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -22,13 +30,17 @@ function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (loading) return; // prevent spam clicks
+    setLoading(true);
+
     try {
       await axiosInstance.post("/auth/register", form);
-      alert("Registration successful!");
       navigate("/login");
     } catch (err) {
       const errorMsg = err.response?.data?.error || "Registration failed";
       alert(errorMsg);
+      setLoading(false); // allow retry on failure
     }
   };
 
@@ -64,8 +76,12 @@ function RegisterPage() {
           onChange={handleChange}
         />
 
-        <button className="btn btn-primary w-full mt-2" type="submit">
-          Register
+        <button
+          className="btn btn-primary w-full mt-2"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? "Registering..." : "Register"}
         </button>
 
         <p className="text-center text-sm">
