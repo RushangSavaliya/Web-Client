@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+  "dev": "concurrently \"vite\" \"ngrok http 5173 --domain=moray-dashing-evenly.ngrok-free.app\" \"sh -c 'sleep 1 && printf \\\"\\033[1;4;36m🌐 Public URL: https://moray-dashing-evenly.ngrok-free.app\\033[0m\\\\n\\\"'\"",
+  "build": "vite build",
+  "lint": "eslint .",
+  "preview": "vite preview"
+}
+,
   "dependencies": {
     "axios": "^1.10.0",
     "lucide-react": "^0.515.0",
@@ -16,6 +17,7 @@
     "react-dom": "^19.1.0",
     "react-hot-toast": "^2.5.2",
     "react-router-dom": "^7.6.2",
+    "socket.io-client": "^4.8.1",
     "zustand": "^5.0.5"
   },
   "devDependencies": {

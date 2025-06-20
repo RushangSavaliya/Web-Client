@@ -1,8 +1,8 @@
 // File: src/App.jsx
 
 import { useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import authStore from "./store/auth.store";
 
@@ -20,7 +20,12 @@ const App = () => {
   return (
     <div className="min-h-screen bg-base-200">
       <Toaster position="top-right" />
-      <Navbar isLoggedIn={isLoggedIn} onLogout={logout} />
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        user={authStore.getState().user}
+        onLogout={logout}
+      />
+
       <Routes>
         <Route
           path="/"
@@ -28,7 +33,9 @@ const App = () => {
         />
         <Route
           path="/login"
-          element={!isLoggedIn ? <LoginPage onLogin={login} /> : <Navigate to="/" />}
+          element={
+            !isLoggedIn ? <LoginPage onLogin={login} /> : <Navigate to="/" />
+          }
         />
         <Route
           path="/register"
