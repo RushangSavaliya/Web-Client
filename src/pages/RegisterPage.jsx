@@ -238,33 +238,6 @@ function RegisterPage() {
                   </button>
                 </div>
 
-                {/* Password Strength Indicator */}
-                {form.password && (
-                  <div className="mt-3">
-                    <div className="flex items-center justify-between text-sm mb-2">
-                      <span className="label-text">Password strength:</span>
-                      <span
-                        className={`font-medium badge badge-sm ${
-                          passwordStrength >= 75
-                            ? "badge-success"
-                            : passwordStrength >= 50
-                              ? "badge-warning"
-                              : passwordStrength >= 25
-                                ? "badge-info"
-                                : "badge-error"
-                        }`}
-                      >
-                        {getPasswordStrengthText()}
-                      </span>
-                    </div>
-                    <progress
-                      className={`progress w-full ${getPasswordStrengthColor()}`}
-                      value={passwordStrength}
-                      max="100"
-                    ></progress>
-                  </div>
-                )}
-
                 {formErrors.password && (
                   <label className="label">
                     <span className="label-text-alt text-error">
