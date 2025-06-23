@@ -294,14 +294,6 @@ function RegisterPage() {
               </button>
             </form>
 
-            {/* Security Note */}
-            <div className="alert alert-info mt-6">
-              <IoShieldCheckmarkOutline className="text-xl" />
-              <span className="text-sm">
-                Your data is protected with end-to-end encryption
-              </span>
-            </div>
-
             {/* Divider */}
             <div className="divider my-8">or</div>
 
