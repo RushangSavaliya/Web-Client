@@ -133,7 +133,7 @@ function RegisterPage() {
             {/* Header */}
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent mb-2">
-                Join ChatApp
+                Register
               </h1>
               <p className="text-base-content/70">
                 Create your account to get started
