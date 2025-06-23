@@ -88,13 +88,8 @@ function LoginPage({ onLogin }) {
           <div className="card-body p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="avatar placeholder mb-4">
-                <div className="bg-gradient-to-r from-primary to-secondary text-primary-content rounded-full w-16">
-                  <IoChatbubbleEllipsesOutline size={28} />
-                </div>
-              </div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
-                Welcome Back
+                Login
               </h1>
               <p className="text-base-content/70">
                 Sign in to your account to continue
