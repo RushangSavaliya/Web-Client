@@ -3,19 +3,26 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  MessageCircle,
+  UserPlus,
+} from "lucide-react";
 import axiosInstance from "../lib/axios";
 
 function RegisterPage() {
   // --- States Section ---
-
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
   });
-
   const [loading, setLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   // --- End States Section ---
 
   const navigate = useNavigate();
@@ -61,6 +68,7 @@ function RegisterPage() {
 
     try {
       await axiosInstance.post("/auth/register", form);
+      toast.success("Account created successfully! Please log in.");
       navigate("/login");
     } catch (err) {
       const errorMsg = err.response?.data?.error || "Registration failed";
@@ -70,61 +78,146 @@ function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-200">
-      <form
-        className="card w-full max-w-sm bg-base-100 shadow-md p-6 space-y-4"
-        onSubmit={handleSubmit}
-      >
-        <h2 className="text-2xl font-bold text-center">Register</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-secondary/20 via-accent/10 to-primary/20 p-4">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10"></div>
 
-        <FormInput
-          label="Username"
-          type="text"
-          name="username"
-          value={form.username}
-          onChange={handleChange}
-        />
+      <div className="card w-full max-w-md bg-base-100/95 backdrop-blur-sm shadow-2xl border border-base-300/50">
+        <div className="card-body p-8 space-y-6">
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <div className="avatar placeholder">
+              <div className="bg-gradient-to-r from-secondary to-accent text-secondary-content rounded-full w-16">
+                <UserPlus size={32} />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
+              Join ChatApp
+            </h1>
+            <p className="text-base-content/70">
+              Create your account to get started
+            </p>
+          </div>
 
-        <FormInput
-          label="Email"
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-        />
+          {/* Register Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Username Input */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium">Username</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="username"
+                  className="input input-bordered w-full pl-12 pr-4 focus:input-secondary"
+                  placeholder="Choose a username"
+                  value={form.username}
+                  onChange={handleChange}
+                  required
+                />
+                <User
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/50"
+                  size={18}
+                />
+              </div>
+              <label className="label">
+                <span className="label-text-alt text-base-content/60">
+                  3-20 characters
+                </span>
+              </label>
+            </div>
 
-        <FormInput
-          label="Password"
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-        />
+            {/* Email Input */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium">Email</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  name="email"
+                  className="input input-bordered w-full pl-12 pr-4 focus:input-secondary"
+                  placeholder="Enter your email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+                <Mail
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/50"
+                  size={18}
+                />
+              </div>
+            </div>
 
-        <button
-          className="btn btn-primary w-full mt-2"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? "Registering..." : "Register"}
-        </button>
+            {/* Password Input */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium">Password</span>
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  className="input input-bordered w-full pl-12 pr-12 focus:input-secondary"
+                  placeholder="Create a password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
+                <Lock
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/50"
+                  size={18}
+                />
+                <button
+                  type="button"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-base-content/50 hover:text-base-content transition-colors"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              <label className="label">
+                <span className="label-text-alt text-base-content/60">
+                  Minimum 8 characters
+                </span>
+              </label>
+            </div>
 
-        <p className="text-center text-sm">
-          Already have an account?{" "}
-          <Link to="/login" className="link link-hover text-primary">
-            Login
-          </Link>
-        </p>
-      </form>
-    </div>
-  );
-}
+            {/* Register Button */}
+            <button
+              type="submit"
+              className={`btn btn-secondary w-full mt-6 ${loading ? "loading" : ""}`}
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm"></span>
+                  Creating Account...
+                </>
+              ) : (
+                "Create Account"
+              )}
+            </button>
+          </form>
 
-function FormInput({ label, ...props }) {
-  return (
-    <div className="form-control">
-      <label className="label">{label}</label>
-      <input className="input input-bordered" required {...props} />
+          {/* Divider */}
+          <div className="divider">or</div>
+
+          {/* Login Link */}
+          <div className="text-center">
+            <p className="text-base-content/70">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="link link-secondary font-medium hover:link-hover"
+              >
+                Sign In
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
