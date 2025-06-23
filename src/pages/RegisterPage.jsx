@@ -324,15 +324,6 @@ function RegisterPage() {
             </div>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="text-center mt-6">
-          <div className="badge badge-outline badge-lg">
-            <span className="text-base-content/60">
-              Join thousands of users worldwide
-            </span>
-          </div>
-        </div>
       </div>
     </div>
   );
