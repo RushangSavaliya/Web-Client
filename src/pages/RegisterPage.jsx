@@ -132,11 +132,6 @@ function RegisterPage() {
           <div className="card-body p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="avatar placeholder mb-4">
-                <div className="bg-gradient-to-r from-secondary to-accent text-secondary-content rounded-full w-16">
-                  <IoPersonAddOutline size={28} />
-                </div>
-              </div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent mb-2">
                 Join ChatApp
               </h1>
