@@ -19,27 +19,59 @@ const App = () => {
     <div className="min-h-screen bg-base-100">
       {/* Toast Notifications */}
       <Toaster
-        position="top-right"
+        position="top-center"
         toastOptions={{
-          duration: 4000,
+          duration: 3500,
           style: {
             background: "hsl(var(--b1))",
             color: "hsl(var(--bc))",
             border: "1px solid hsl(var(--b3))",
+            borderRadius: "12px",
+            padding: "12px 16px",
+            fontSize: "14px",
+            fontWeight: "500",
+            minWidth: "280px",
+            maxWidth: "90vw",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(8px)",
           },
           success: {
+            style: {
+              background: "hsl(var(--su))",
+              color: "hsl(var(--suc))",
+              border: "1px solid hsl(var(--su))",
+            },
             iconTheme: {
-              primary: "hsl(var(--su))",
-              secondary: "hsl(var(--suc))",
+              primary: "hsl(var(--suc))",
+              secondary: "hsl(var(--su))",
             },
           },
           error: {
+            style: {
+              background: "hsl(var(--er))",
+              color: "hsl(var(--erc))",
+              border: "1px solid hsl(var(--er))",
+            },
             iconTheme: {
-              primary: "hsl(var(--er))",
-              secondary: "hsl(var(--erc))",
+              primary: "hsl(var(--erc))",
+              secondary: "hsl(var(--er))",
+            },
+          },
+          loading: {
+            style: {
+              background: "hsl(var(--b1))",
+              color: "hsl(var(--bc))",
+              border: "1px solid hsl(var(--b3))",
             },
           },
         }}
+        containerStyle={{
+          top: "16px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 9999,
+        }}
+        containerClassName="toast-container"
       />
 
       {/* Navigation - Only show for authenticated users */}
