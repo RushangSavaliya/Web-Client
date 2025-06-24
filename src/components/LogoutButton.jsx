@@ -29,8 +29,9 @@ export default function LogoutButton({ onLogout }) {
     <button
       onClick={handleLogout}
       disabled={loading}
-      className="btn btn-ghost btn-sm"
+      className="btn btn-ghost btn-sm h-8 w-8 sm:h-9 sm:w-9 p-0 touch-manipulation"
       title="Logout"
+      aria-label="Logout"
     >
       {loading ? (
         <span className="loading loading-spinner loading-xs"></span>
