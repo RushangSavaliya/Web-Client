@@ -1,3 +1,7 @@
 /* File: src/index.css */
 
 @import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: dim --default;
+}
