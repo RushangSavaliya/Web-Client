@@ -11,11 +11,6 @@ function RegisterPage() {
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [validations, setValidations] = useState({
-    username: null,
-    email: null,
-    password: null,
-  });
 
   const navigate = useNavigate();
 
@@ -25,35 +20,6 @@ function RegisterPage() {
       ...prev,
       [name]: value,
     }));
-
-    // Real-time validation
-    validateField(name, value);
-  };
-
-  const validateField = (name, value) => {
-    let isValid = null;
-
-    switch (name) {
-      case "username":
-        isValid =
-          value.length >= 3 &&
-          value.length <= 20 &&
-          /^[a-zA-Z0-9_]+$/.test(value);
-        break;
-      case "email":
-        isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-        break;
-      case "password":
-        isValid = value.length >= 8;
-        break;
-      default:
-        break;
-    }
-
-    setValidations((prev) => ({
-      ...prev,
-      [name]: value ? isValid : null,
-    }));
   };
 
   const handleSubmit = async (e) => {
@@ -62,7 +28,6 @@ function RegisterPage() {
 
     const { username, email, password } = form;
 
-    // Comprehensive validation
     if (!username.trim()) {
       toast.error("Username is required");
       return;
@@ -123,81 +88,82 @@ function RegisterPage() {
 
   const isFormValid = () => {
     return (
-      form.username.trim() &&
-      form.email.trim() &&
-      form.password.trim() &&
-      validations.username === true &&
-      validations.email === true &&
-      validations.password === true
+      form.username.trim().length >= 3 &&
+      form.username.trim().length <= 20 &&
+      /^[a-zA-Z0-9_]+$/.test(form.username.trim()) &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()) &&
+      form.password.trim().length >= 8
     );
   };
 
   return (
-    <div className="min-h-screen bg-base-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
+      <div className="w-full max-w-[320px] sm:max-w-[360px] md:max-w-[400px] lg:max-w-[420px]">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary text-primary-content flex items-center justify-center text-2xl">
+        <div className="text-center mb-6 sm:mb-8 md:mb-10">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 sm:mb-4 rounded-xl sm:rounded-2xl bg-primary text-primary-content flex items-center justify-center text-lg sm:text-xl md:text-2xl">
             💬
           </div>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-base-content mb-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-base-content mb-1 sm:mb-2">
             Create account
           </h1>
-          <p className="text-base-content/60">
-            Join ChatApp and start connecting
+          <p className="text-sm sm:text-base text-base-content/60">
+            Join ChatApp today
           </p>
         </div>
 
         {/* Register Form */}
-        <div className="bg-base-100 border border-base-300 rounded-2xl p-6 sm:p-8 shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-base-100 border border-base-300 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 sm:space-y-5 md:space-y-6"
+          >
             {/* Username Field */}
-            <FormInput
-              label="Username"
-              type="text"
-              name="username"
-              value={form.username}
-              onChange={handleChange}
-              placeholder="Choose a username"
-              disabled={loading}
-              validation={validations.username}
-              helpText="3-20 characters, letters, numbers, and underscores only"
-              autoComplete="username"
-            />
+            <div>
+              <label className="block text-xs sm:text-sm font-medium text-base-content mb-2">
+                Username
+              </label>
+              <input
+                type="text"
+                name="username"
+                className="input input-bordered w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base"
+                value={form.username}
+                onChange={handleChange}
+                disabled={loading}
+                autoComplete="username"
+                autoCapitalize="none"
+                autoCorrect="off"
+              />
+            </div>
 
             {/* Email Field */}
-            <FormInput
-              label="Email"
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Enter your email address"
-              disabled={loading}
-              validation={validations.email}
-              helpText="We'll use this to verify your account"
-              autoComplete="email"
-            />
+            <div>
+              <label className="block text-xs sm:text-sm font-medium text-base-content mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                className="input input-bordered w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base"
+                value={form.email}
+                onChange={handleChange}
+                disabled={loading}
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+              />
+            </div>
 
             {/* Password Field */}
-            <div className="form-control">
-              <label className="label pb-2">
-                <span className="label-text text-sm font-medium text-base-content">
-                  Password
-                </span>
+            <div>
+              <label className="block text-xs sm:text-sm font-medium text-base-content mb-2">
+                Password
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  className={`input input-bordered w-full h-12 text-base pr-12 ${
-                    validations.password === true
-                      ? "input-success"
-                      : validations.password === false
-                        ? "input-error"
-                        : ""
-                  }`}
-                  placeholder="Create a strong password"
+                  className="input input-bordered w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base pr-10 sm:pr-12"
                   value={form.password}
                   onChange={handleChange}
                   disabled={loading}
@@ -205,13 +171,13 @@ function RegisterPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-base-content/60 hover:text-base-content transition-colors"
+                  className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-base-content/50 hover:text-base-content transition-colors p-1"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={loading}
                 >
                   {showPassword ? (
                     <svg
-                      className="w-5 h-5"
+                      className="w-4 h-4 sm:w-5 sm:h-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -225,7 +191,7 @@ function RegisterPage() {
                     </svg>
                   ) : (
                     <svg
-                      className="w-5 h-5"
+                      className="w-4 h-4 sm:w-5 sm:h-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -246,18 +212,13 @@ function RegisterPage() {
                   )}
                 </button>
               </div>
-              <div className="label">
-                <span className="label-text-alt text-base-content/60">
-                  At least 8 characters
-                </span>
-              </div>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading || !isFormValid()}
-              className="btn btn-primary w-full h-12 text-base font-medium"
+              className="btn btn-primary w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base font-medium mt-6 sm:mt-8"
             >
               {loading ? (
                 <>
@@ -272,8 +233,8 @@ function RegisterPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-6">
-          <p className="text-sm text-base-content/60">
+        <div className="text-center mt-4 sm:mt-6">
+          <p className="text-xs sm:text-sm text-base-content/60">
             Already have an account?{" "}
             <Link
               to="/login"
@@ -284,35 +245,6 @@ function RegisterPage() {
           </p>
         </div>
       </div>
-    </div>
-  );
-}
-
-function FormInput({ label, validation, helpText, ...props }) {
-  return (
-    <div className="form-control">
-      <label className="label pb-2">
-        <span className="label-text text-sm font-medium text-base-content">
-          {label}
-        </span>
-      </label>
-      <input
-        className={`input input-bordered w-full h-12 text-base ${
-          validation === true
-            ? "input-success"
-            : validation === false
-              ? "input-error"
-              : ""
-        }`}
-        {...props}
-      />
-      {helpText && (
-        <div className="label">
-          <span className="label-text-alt text-base-content/60">
-            {helpText}
-          </span>
-        </div>
-      )}
     </div>
   );
 }
