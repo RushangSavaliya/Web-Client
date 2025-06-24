@@ -1,9 +1,4 @@
-export default function MessageBubble({
-  message,
-  isOwn,
-  isFirstFromSender,
-  isLastFromSender,
-}) {
+export default function MessageBubble({ message, isOwn, showAvatar }) {
   const formatTime = (timestamp) => {
     return new Date(timestamp).toLocaleTimeString([], {
       hour: "2-digit",
@@ -12,47 +7,34 @@ export default function MessageBubble({
   };
 
   return (
-    <div
-      className={`message-bubble flex items-end gap-2 ${isOwn ? "justify-end" : "justify-start"}`}
-    >
-      {/* Avatar for received messages */}
-      {!isOwn && isLastFromSender && (
-        <div className="avatar placeholder mb-1">
-          <div className="bg-primary text-primary-content w-8 rounded-full">
-            <span className="text-xs font-semibold">
-              {message.senderName?.charAt(0).toUpperCase() || "U"}
-            </span>
-          </div>
+    <div className={`flex gap-3 ${isOwn ? "justify-end" : "justify-start"}`}>
+      {/* Avatar (only for received messages) */}
+      {!isOwn && (
+        <div
+          className={`w-8 h-8 rounded-full bg-neutral text-neutral-content flex items-center justify-center text-xs font-medium ${
+            showAvatar ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {showAvatar ? message.senderName?.charAt(0).toUpperCase() || "U" : ""}
         </div>
       )}
 
-      {/* Spacer when not showing avatar */}
-      {!isOwn && !isLastFromSender && <div className="w-8"></div>}
-
       {/* Message Content */}
       <div
-        className={`message-content max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl ${
-          isOwn ? "items-end" : "items-start"
-        } flex flex-col`}
+        className={`max-w-xs sm:max-w-sm ${isOwn ? "items-end" : "items-start"} flex flex-col`}
       >
-        {/* Message Bubble */}
         <div
-          className={`message-text px-4 py-3 shadow-sm transition-all duration-200 hover:shadow-md ${
+          className={`px-4 py-2 rounded-2xl ${
             isOwn
-              ? "bg-primary text-primary-content rounded-2xl rounded-br-md"
-              : "bg-base-200 text-base-content rounded-2xl rounded-bl-md border border-base-300"
+              ? "bg-primary text-primary-content"
+              : "bg-base-200 text-base-content"
           }`}
         >
-          <p className="break-words leading-relaxed">{message.content}</p>
+          <p className="break-words">{message.content}</p>
         </div>
 
-        {/* Timestamp */}
-        {isLastFromSender && (
-          <div
-            className={`message-time mt-1 px-2 ${
-              isOwn ? "text-right" : "text-left"
-            }`}
-          >
+        {showAvatar && (
+          <div className={`mt-1 px-1 ${isOwn ? "text-right" : "text-left"}`}>
             <span className="text-xs text-base-content/50">
               {formatTime(message.createdAt)}
             </span>
@@ -60,19 +42,8 @@ export default function MessageBubble({
         )}
       </div>
 
-      {/* Avatar for sent messages */}
-      {isOwn && isLastFromSender && (
-        <div className="avatar placeholder mb-1">
-          <div className="bg-primary text-primary-content w-8 rounded-full">
-            <span className="text-xs font-semibold">
-              {message.senderName?.charAt(0).toUpperCase() || "Y"}
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Spacer when not showing avatar */}
-      {isOwn && !isLastFromSender && <div className="w-8"></div>}
+      {/* Spacer for sent messages */}
+      {isOwn && <div className="w-8"></div>}
     </div>
   );
 }

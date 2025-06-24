@@ -6,7 +6,7 @@ export default function LogoutButton({ onLogout }) {
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
-    if (loading) return; // block double click
+    if (loading) return;
     setLoading(true);
 
     try {
@@ -28,33 +28,26 @@ export default function LogoutButton({ onLogout }) {
   return (
     <button
       onClick={handleLogout}
-      className={`btn btn-sm btn-error text-white ${loading ? "loading" : ""} hover:btn-error-focus transition-all duration-200`}
       disabled={loading}
+      className="btn btn-ghost btn-sm"
       title="Logout"
     >
       {loading ? (
-        <>
-          <span className="loading loading-spinner loading-xs"></span>
-          Logging out...
-        </>
+        <span className="loading loading-spinner loading-xs"></span>
       ) : (
-        <>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            />
-          </svg>
-          Logout
-        </>
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
       )}
     </button>
   );
