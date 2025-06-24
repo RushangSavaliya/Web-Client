@@ -1,13 +1,27 @@
 // File: src/store/auth.store.js
 
+// =======================
+// Imports
+// =======================
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
 
+// =======================
+// Auth Store Definition
+// =======================
 const authStore = create((set) => ({
+    // =======================
+    // State
+    // =======================
     token: localStorage.getItem("token") || null,
     isLoggedIn: !!localStorage.getItem("token"),
     user: null, // 👈 Add user state
 
+    // =======================
+    // Actions
+    // =======================
+
+    // ---- Login Action ----
     login: async (token) => {
         if (!token) return false;
 
@@ -16,8 +30,9 @@ const authStore = create((set) => ({
 
         try {
             const res = await axiosInstance.get("/auth/me");
-            if (res.data?.user) {
-                set({ user: res.data.user }); // ✅ Save user info
+            const user = res.data?.user;
+            if (user) {
+                set({ user });
                 return true;
             }
             throw new Error("Invalid session");
@@ -28,6 +43,7 @@ const authStore = create((set) => ({
         }
     },
 
+    // ---- Logout Action ----
     logout: async () => {
         try {
             await axiosInstance.post("/auth/logout");
@@ -40,4 +56,7 @@ const authStore = create((set) => ({
     },
 }));
 
+// =======================
+// Export
+// =======================
 export default authStore;

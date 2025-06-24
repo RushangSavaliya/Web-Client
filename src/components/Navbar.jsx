@@ -1,25 +1,48 @@
-// File: src/components/Navbar.jsx
-
+import { LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
-import LogoutButton from "./LogoutButton";
 
+// Navbar component
 export default function Navbar({ isLoggedIn, user, onLogout }) {
   return (
-    <div className="navbar bg-base-100 shadow sticky top-0 z-10 px-6">
-      <div className="flex-1">
-        <Link to="/" className="text-xl font-bold text-primary">
-          💬 ChatApp
-        </Link>
-      </div>
+    <nav className="h-14 sm:h-16 px-4 sm:px-6 border-b border-base-300 bg-base-100 flex items-center justify-between">
+      {/* === Brand Section === */}
+      <Link
+        to="/"
+        className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl font-semibold text-base-content"
+      >
+        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary text-primary-content flex items-center justify-center text-base sm:text-lg">
+          💬
+        </div>
+        <span className="hidden xs:inline sm:inline">ChatApp</span>
+      </Link>
 
+      {/* === User Menu Section === */}
       {isLoggedIn && user && (
-        <div className="flex items-center gap-4">
-          <span className="font-medium text-base">
-            Hello, <span className="text-primary">{user.username}</span>
-          </span>
-          <LogoutButton onLogout={onLogout} />
+        <div className="flex items-center gap-2 sm:gap-4">
+          {/* --- User Info (hidden on very small screens) --- */}
+          <div className="text-right hidden sm:block">
+            <div className="text-sm font-medium text-base-content truncate max-w-32 lg:max-w-none">
+              {user.username}
+            </div>
+            <div className="text-xs text-base-content/60">Online</div>
+          </div>
+
+          {/* --- User Avatar --- */}
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-neutral text-neutral-content flex items-center justify-center text-xs sm:text-sm font-medium shrink-0">
+            {user.username.charAt(0).toUpperCase()}
+          </div>
+
+          {/* --- Logout Button --- */}
+          <button
+            onClick={onLogout}
+            className="btn btn-ghost btn-sm h-8 w-8 sm:h-9 sm:w-9 p-0 touch-manipulation"
+            title="Logout"
+            aria-label="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       )}
-    </div>
+    </nav>
   );
 }
