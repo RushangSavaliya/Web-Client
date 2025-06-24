@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Send } from "lucide-react";
+import toast from "react-hot-toast";
 import axiosInstance from "../lib/axios";
 
 export default function MessageInput({ receiverId, onSent }) {
@@ -18,6 +20,7 @@ export default function MessageInput({ receiverId, onSent }) {
       setContent("");
     } catch (error) {
       console.error("Failed to send message:", error);
+      toast.error("Failed to send message. Please try again.");
     } finally {
       setIsSending(false);
     }
@@ -37,7 +40,7 @@ export default function MessageInput({ receiverId, onSent }) {
         <div className="flex-1 min-w-0">
           <input
             type="text"
-            className="input input-bordered w-full text-sm sm:text-base h-10 sm:h-12"
+            className="input input-bordered w-full text-sm sm:text-base h-10 sm:h-11 md:h-12"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -53,25 +56,13 @@ export default function MessageInput({ receiverId, onSent }) {
         <button
           onClick={handleSend}
           disabled={!content.trim() || isSending}
-          className="btn btn-primary btn-circle h-10 w-10 sm:h-12 sm:w-12 min-h-10 sm:min-h-12 shrink-0"
+          className="btn btn-primary btn-circle h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 min-h-10 sm:min-h-11 md:min-h-12 shrink-0"
           aria-label="Send message"
         >
           {isSending ? (
             <span className="loading loading-spinner loading-sm"></span>
           ) : (
-            <svg
-              className="w-4 h-4 sm:w-5 sm:h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-              />
-            </svg>
+            <Send className="w-4 h-4 sm:w-5 sm:h-5" />
           )}
         </button>
       </div>

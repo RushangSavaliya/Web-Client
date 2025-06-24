@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Menu, X, Users } from "lucide-react";
+import toast from "react-hot-toast";
 import axiosInstance from "../lib/axios";
 import socket from "../lib/socket";
 import authStore from "../store/auth.store";
@@ -24,6 +26,7 @@ export default function HomePage() {
         setMessages(res.data.messages);
       } catch (error) {
         console.error("Failed to load messages:", error);
+        toast.error("Failed to load messages. Please try again.");
       } finally {
         setIsLoading(false);
       }
@@ -52,7 +55,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] relative">
+    <div className="flex h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] relative">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
@@ -91,19 +94,7 @@ export default function HomePage() {
                   className="btn btn-ghost btn-sm p-2 md:hidden"
                   aria-label="Open contacts"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
+                  <Menu className="w-5 h-5" />
                 </button>
 
                 {/* User Info */}
@@ -114,8 +105,13 @@ export default function HomePage() {
                   <div className="min-w-0">
                     <h2 className="font-medium text-base-content text-sm sm:text-base truncate">
                       {selectedUser.username}
+                      {selectedUser._id === user._id && " (You)"}
                     </h2>
-                    <p className="text-xs text-base-content/60">Online</p>
+                    <p className="text-xs text-base-content/60">
+                      {selectedUser._id === user._id
+                        ? "Personal Chat"
+                        : "Online"}
+                    </p>
                   </div>
                 </div>
 
@@ -125,19 +121,7 @@ export default function HomePage() {
                   className="btn btn-ghost btn-sm p-2 md:hidden"
                   aria-label="Back to contacts"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </header>
@@ -165,20 +149,8 @@ export default function HomePage() {
                 onClick={() => setSidebarOpen(true)}
                 className="btn btn-primary mb-6 md:hidden"
               >
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-                View Contacts
+                <Users className="w-5 h-5 mr-2" />
+                View Users
               </button>
 
               <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-base-300 flex items-center justify-center text-xl sm:text-2xl mb-4 mx-auto">
@@ -189,10 +161,10 @@ export default function HomePage() {
               </h2>
               <p className="text-base-content/60 text-sm">
                 <span className="hidden md:inline">
-                  Select a contact from the sidebar to begin messaging
+                  Select a user from the sidebar to begin messaging
                 </span>
                 <span className="md:hidden">
-                  Tap "View Contacts" to choose someone to chat with
+                  Tap "View Users" to choose someone to chat with
                 </span>
               </p>
             </div>

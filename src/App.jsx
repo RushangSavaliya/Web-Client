@@ -17,7 +17,7 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      {/* Toast Notifications */}
+      {/* Toast Notifications - Only for errors and critical messages */}
       <Toaster
         position="top-center"
         toastOptions={{
@@ -66,7 +66,7 @@ const App = () => {
           },
         }}
         containerStyle={{
-          top: "16px",
+          top: isLoggedIn ? "76px" : "20px", // Below navbar when logged in
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 9999,

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import LogoutButton from "./LogoutButton";
+import { LogOut } from "lucide-react";
+import authStore from "../store/auth.store";
 
 export default function Navbar({ isLoggedIn, user, onLogout }) {
   return (
@@ -32,7 +33,14 @@ export default function Navbar({ isLoggedIn, user, onLogout }) {
           </div>
 
           {/* Logout Button */}
-          <LogoutButton onLogout={onLogout} />
+          <button
+            onClick={onLogout}
+            className="btn btn-ghost btn-sm h-8 w-8 sm:h-9 sm:w-9 p-0 touch-manipulation"
+            title="Logout"
+            aria-label="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       )}
     </nav>
