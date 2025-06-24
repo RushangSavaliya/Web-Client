@@ -2,6 +2,9 @@
 
 @import "tailwindcss";
 
-@plugin "daisyui" {
-  themes: dim --default;
+/* DaisyUI theme configuration */
+@layer base {
+  :root {
+    --default-theme: dim;
+  }
 }
