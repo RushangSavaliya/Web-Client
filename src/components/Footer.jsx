@@ -1,38 +1,39 @@
-import { Github, Linkedin } from "lucide-react";
+// File: src/components/Footer.jsx
 
-// Footer component
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+
+// Footer component for the application
 export default function Footer() {
   return (
-    // Container for the footer
-    <div className="text-center mt-8 mb-4">
-      {/* Main content: text and social icons */}
+    <footer className="mt-8 mb-4 text-center">
+      {/* Container for footer content */}
       <div className="flex items-center justify-center gap-3 text-sm text-base-content/60">
         {/* Footer text */}
         <span>Cooked by Rushang</span>
-        {/* Social icons section */}
+        {/* Social media icons section */}
         <div className="flex items-center gap-2">
-          {/* GitHub link */}
+          {/* GitHub Profile Link */}
           <a
             href="https://github.com/RushangSavaliya"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-lg transition-colors hover:text-primary hover:bg-primary/10"
             aria-label="GitHub Profile"
+            className="btn btn-ghost btn-sm p-2 rounded-lg text-base-content/70 hover:text-primary hover:bg-primary/10"
           >
-            <Github className="w-4 h-4" />
+            <FaGithub className="w-4 h-4" />
           </a>
-          {/* LinkedIn link */}
+          {/* LinkedIn Profile Link */}
           <a
             href="https://www.linkedin.com/in/rushang-savaliya/"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-lg transition-colors hover:text-primary hover:bg-primary/10"
             aria-label="LinkedIn Profile"
+            className="btn btn-ghost btn-sm p-2 rounded-lg text-base-content/70 hover:text-primary hover:bg-primary/10"
           >
-            <Linkedin className="w-4 h-4" />
+            <FaLinkedin className="w-4 h-4" />
           </a>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }

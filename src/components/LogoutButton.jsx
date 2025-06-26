@@ -1,18 +1,19 @@
-// Import dependencies
+// File: src/components/LogoutButton.jsx
+
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { FiLogOut } from "react-icons/fi";
 import axiosInstance from "../lib/axios";
 
-// LogoutButton component definition
+// LogoutButton Component
 export default function LogoutButton({ onLogout }) {
-  // State to track loading status
+  // State to manage loading status
   const [loading, setLoading] = useState(false);
 
   // Handler for logout action
   const handleLogout = async () => {
-    if (loading) return;
+    if (loading) return; // Prevent multiple clicks
     setLoading(true);
-
     try {
       // Send logout request to backend
       const res = await axiosInstance.post("/auth/logout");
@@ -22,14 +23,14 @@ export default function LogoutButton({ onLogout }) {
         toast.success("Logged out successfully");
         onLogout();
       } else {
-        // On failure: show error toast
+        // Handle unexpected response
         toast.error("Logout failed");
-        setLoading(false);
       }
     } catch (err) {
       // Handle errors from request
       toast.error(err.response?.data?.error || "Logout failed");
-      setLoading(false);
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
@@ -42,24 +43,11 @@ export default function LogoutButton({ onLogout }) {
       title="Logout"
       aria-label="Logout"
     >
+      {/* Show spinner while loading, otherwise show logout icon */}
       {loading ? (
-        // Show loading spinner when logging out
         <span className="loading loading-spinner loading-xs"></span>
       ) : (
-        // Show logout icon when not loading
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-          />
-        </svg>
+        <FiLogOut className="w-4 h-4" />
       )}
     </button>
   );
