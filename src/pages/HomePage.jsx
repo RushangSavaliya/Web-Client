@@ -71,9 +71,8 @@ export default function HomePage() {
 
       {/* ====== Sidebar: User List ====== */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-50 w-80 sm:w-96 border-r border-base-300 bg-base-100 transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
+        className={`fixed md:static inset-y-0 left-0 z-50 w-80 sm:w-96 border-r border-base-300 bg-base-100 transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          }`}
       >
         <UserList
           onSelect={handleUserSelect}
@@ -126,7 +125,7 @@ export default function HomePage() {
             </header>
 
             {/* ====== Chat Messages ====== */}
-            <div className="flex-1 overflow-hidden bg-base-50">
+            <div className="flex-1 overflow-auto bg-base-50">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full">
                   <span className="loading loading-dots loading-md text-primary" />
