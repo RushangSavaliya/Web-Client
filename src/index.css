@@ -3,5 +3,5 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: retro --default;
+  themes: dim --default;
 }
