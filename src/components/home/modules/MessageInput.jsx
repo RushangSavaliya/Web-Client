@@ -3,40 +3,39 @@
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
 import { FiSend } from "react-icons/fi";
-import axiosInstance from "../lib/axios";
+import axiosInstance from "../../../lib/axios";
 
-export default function MessageInput({ receiverId, onSent }) {
+function MessageInput({ receiverId, onSent }) {
+  // State
   const [content, setContent] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [hasError, setHasError] = useState(false);
+
+  // Refs
   const inputRef = useRef(null);
   const shouldRefocus = useRef(false);
 
-  const focusInput = () => inputRef.current?.focus();
-
-  // Focus on mount
+  // Focus input on mount and after send/clear
   useEffect(() => {
-    focusInput();
+    inputRef.current?.focus();
   }, []);
 
-  // Refocus after send/clear
   useEffect(() => {
     if (shouldRefocus.current) {
-      focusInput();
+      inputRef.current?.focus();
       shouldRefocus.current = false;
     }
   }, [content]);
 
+  // Send message
   const handleSend = async () => {
     if (!content.trim() || isSending) return;
     setIsSending(true);
-
     try {
       const res = await axiosInstance.post("/messages", {
         receiverId,
         content,
       });
-
       onSent(res.data.message);
       setContent("");
       shouldRefocus.current = true;
@@ -49,19 +48,24 @@ export default function MessageInput({ receiverId, onSent }) {
     }
   };
 
+  // Keyboard shortcuts
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
-    } else if (e.key === "Escape") {
+    }
+    if (e.key === "Escape") {
       setContent("");
       shouldRefocus.current = true;
     }
   };
 
+  // Classes
   const buttonSize = "h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12";
-  const inputClass = `input input-bordered w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base ${hasError ? "input-error" : ""
-    }`;
+  const inputClass = [
+    "input input-bordered w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base",
+    hasError ? "input-error" : "",
+  ].join(" ");
 
   return (
     <div className="border-t border-base-300 bg-base-100 p-4 sm:p-6">
@@ -84,7 +88,6 @@ export default function MessageInput({ receiverId, onSent }) {
             enterKeyHint="send"
           />
         </div>
-
         <button
           type="button"
           onClick={handleSend}
@@ -103,3 +106,5 @@ export default function MessageInput({ receiverId, onSent }) {
     </div>
   );
 }
+
+export default MessageInput;

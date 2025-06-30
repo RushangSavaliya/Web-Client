@@ -1,40 +1,35 @@
-// File: src/components/LogoutButton.jsx
+// File: src/components/home/modules/LogoutButton.jsx
 
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FiLogOut } from "react-icons/fi";
-import axiosInstance from "../lib/axios";
+import axiosInstance from "../../../lib/axios";
 
-// LogoutButton Component
-export default function LogoutButton({ onLogout }) {
-  // State to manage loading status
+function LogoutButton({ onLogout }) {
   const [loading, setLoading] = useState(false);
 
-  // Handler for logout action
   const handleLogout = async () => {
-    if (loading) return; // Prevent multiple clicks
+    if (loading) return;
     setLoading(true);
+
     try {
-      // Send logout request to backend
-      const res = await axiosInstance.post("/auth/logout");
-      if (res.status === 200) {
-        // On success: remove token, show toast, call onLogout callback
+      const response = await axiosInstance.post("/auth/logout");
+
+      if (response.status === 200) {
         localStorage.removeItem("token");
         toast.success("Logged out successfully");
         onLogout();
       } else {
-        // Handle unexpected response
         toast.error("Logout failed");
       }
-    } catch (err) {
-      // Handle errors from request
-      toast.error(err.response?.data?.error || "Logout failed");
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || "Logout failed";
+      toast.error(errorMessage);
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
-  // Render logout button
   return (
     <button
       onClick={handleLogout}
@@ -43,7 +38,6 @@ export default function LogoutButton({ onLogout }) {
       title="Logout"
       aria-label="Logout"
     >
-      {/* Show spinner while loading, otherwise show logout icon */}
       {loading ? (
         <span className="loading loading-spinner loading-xs"></span>
       ) : (
@@ -52,3 +46,5 @@ export default function LogoutButton({ onLogout }) {
     </button>
   );
 }
+
+export default LogoutButton;
