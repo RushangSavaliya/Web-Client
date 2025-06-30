@@ -4,7 +4,6 @@
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -13,7 +12,7 @@ import authStore from "./store/auth.store";
 // --- Main App Component ---
 const App = () => {
   // --- Auth Store State & Actions ---
-  const { token, isLoggedIn, login, logout } = authStore();
+  const { token, isLoggedIn, login } = authStore();
 
   // --- Effect: Auto-login if token exists ---
   useEffect(() => {
@@ -25,20 +24,10 @@ const App = () => {
       {/* --- Toast Notifications --- */}
       <Toaster position="top-center" />
 
-      {/* --- Navbar (only when logged in) --- */}
-      {isLoggedIn && (
-        <Navbar
-          isLoggedIn={isLoggedIn}
-          user={authStore.getState().user}
-          onLogout={logout}
-        />
-      )}
-
       {/* --- Main Content Area --- */}
       <main
-        className={`flex-1 ${
-          !isLoggedIn ? "flex items-center justify-center" : ""
-        }`}
+        className={`flex-1 ${!isLoggedIn ? "flex items-center justify-center" : ""
+          }`}
       >
         {/* --- App Routes --- */}
         <Routes>
