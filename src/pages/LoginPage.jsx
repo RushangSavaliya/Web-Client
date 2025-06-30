@@ -1,3 +1,5 @@
+// File: src/pages/LoginPage.jsx
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { FaComments, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -9,27 +11,21 @@ import axiosInstance from "../lib/axios";
  * LoginPage component handles user authentication.
  */
 function LoginPage({ onLogin }) {
-  // State for form fields
+  // -------------------- State & Refs --------------------
   const [form, setForm] = useState({ identifier: "", password: "" });
-  // Loading state for submit button
   const [loading, setLoading] = useState(false);
-  // Toggle password visibility
   const [showPassword, setShowPassword] = useState(false);
-  // Validation errors
   const [errors, setErrors] = useState({});
-  // Ref for focusing identifier input
   const identifierRef = useRef(null);
-  // Router navigation
   const navigate = useNavigate();
 
-  // Focus identifier input on mount
+  // -------------------- Effects --------------------
+  // Focus on identifier input on mount
   useEffect(() => {
     identifierRef.current?.focus();
   }, []);
 
-  /**
-   * Validate form fields.
-   */
+  // -------------------- Validation --------------------
   const validate = useCallback(() => {
     const errs = {};
     if (!form.identifier.trim()) errs.identifier = "Required";
@@ -38,31 +34,28 @@ function LoginPage({ onLogin }) {
     return Object.keys(errs).length === 0;
   }, [form]);
 
-  /**
-   * Handle input changes.
-   */
+  // -------------------- Handlers --------------------
+  // Handle input changes
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   }, []);
 
-  /**
-   * Handle form submission.
-   */
+  // Handle form submission
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       if (loading || !validate()) return;
       setLoading(true);
       try {
-        // API call to login
+        // Attempt login
         const res = await axiosInstance.post("/auth/login", {
           usernameORemail: form.identifier,
           password: form.password,
         });
-        const { token } = res.data;
-        const success = await onLogin(token);
+        // Pass token to parent
+        const success = await onLogin(res.data.token);
         if (success) navigate("/");
         else toast.error("Session validation failed");
       } catch (err) {
@@ -74,91 +67,81 @@ function LoginPage({ onLogin }) {
     [form, loading, navigate, onLogin, validate]
   );
 
-  // --- Render ---
-
+  // -------------------- Render --------------------
   return (
     <div className="min-h-screen bg-base-200 flex flex-col">
       {/* Main Content */}
-      <main className="flex-grow flex justify-center items-center px-4 py-10">
-        <section className="w-full max-w-md mx-auto">
+      <main className="flex-grow flex justify-center items-center px-4 py-8">
+        <section className="w-full max-w-lg md:max-w-xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-6">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-primary text-primary-content flex items-center justify-center shadow">
-              <FaComments className="w-6 h-6" />
+          <div className="text-center mb-3">
+            <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-2 rounded-xl bg-primary text-primary-content flex items-center justify-center shadow-sm">
+              <FaComments className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold">Welcome back</h1>
-            <p className="text-sm md:text-base text-base-content/60">
-              Sign in to your account
-            </p>
+            <h1 className="text-xl md:text-2xl font-medium leading-tight">
+              Access your account
+            </h1>
           </div>
 
           {/* Login Form */}
           <form
             onSubmit={handleSubmit}
             autoComplete="on"
-            className="w-full bg-base-100 border border-base-300 rounded-xl p-4 sm:p-6 shadow space-y-4"
+            className="bg-base-100 border border-base-300 rounded-xl px-6 md:px-8 py-6 md:py-8 shadow-sm space-y-5 md:space-y-6"
           >
             {/* Identifier Field */}
-            <div className="w-full">
-              <label htmlFor="identifier" className="label-text text-sm">
-                Email or Username
-              </label>
+            <label className="floating-label validator w-full">
               <input
                 ref={identifierRef}
                 type="text"
-                id="identifier"
                 name="identifier"
-                className={`input input-sm input-bordered w-full ${errors.identifier ? "input-error" : ""}`}
+                className={`input input-bordered input-md w-full ${errors.identifier ? "input-error" : ""}`}
+                placeholder="Username or Email"
                 value={form.identifier}
                 onChange={handleChange}
-                placeholder="username or email"
                 autoComplete="username"
               />
+              <span>Email or Username</span>
               {errors.identifier && (
-                <p className="text-error text-xs mt-1">{errors.identifier}</p>
+                <p className="validator-hint text-error">{errors.identifier}</p>
               )}
-            </div>
+            </label>
 
             {/* Password Field */}
-            <div className="w-full">
-              <label htmlFor="password" className="label-text text-sm">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  className={`input input-sm input-bordered w-full pr-10 ${errors.password ? "input-error" : ""}`}
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="password"
-                  autoComplete="current-password"
-                />
-                {/* Toggle Password Visibility */}
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-base-content"
-                  onClick={() => setShowPassword((v) => !v)}
-                  tabIndex={-1}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
-                </button>
-              </div>
+            <label className="floating-label validator w-full relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className={`input input-bordered input-md w-full pr-10 ${errors.password ? "input-error" : ""}`}
+                placeholder="Password"
+                value={form.password}
+                onChange={handleChange}
+                autoComplete="current-password"
+              />
+              <span>Password</span>
+              {/* Toggle Password Visibility */}
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-base-content"
+                onClick={() => setShowPassword((v) => !v)}
+                tabIndex={-1}
+                aria-label="Toggle password visibility"
+              >
+                {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+              </button>
               {errors.password && (
-                <p className="text-error text-xs mt-1">{errors.password}</p>
+                <p className="validator-hint text-error">{errors.password}</p>
               )}
-            </div>
+            </label>
 
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-sm md:btn-md btn-primary w-full"
+              className="btn btn-md btn-primary w-full"
               disabled={loading || !form.identifier || !form.password}
             >
               {loading ? (
-                <span className="loading loading-spinner loading-xs"></span>
+                <span className="loading loading-spinner loading-sm" />
               ) : (
                 "Login"
               )}
@@ -166,14 +149,15 @@ function LoginPage({ onLogin }) {
 
             {/* Register Link */}
             <p className="text-center text-sm">
-              Don’t have an account?{" "}
-              <Link to="/register" className="link link-hover text-primary font-semibold">
+              No account?{" "}
+              <Link to="/register" className="link text-primary font-medium">
                 Register
               </Link>
             </p>
           </form>
         </section>
       </main>
+
       {/* Footer */}
       <Footer />
     </div>
