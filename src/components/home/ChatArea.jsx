@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
-import { BsChatDots } from "react-icons/bs"; // ✅ replaced <i> with this
+import { BsChatDots } from "react-icons/bs";
 import axiosInstance from "../../lib/axios";
 import socket from "../../lib/socket";
 import authStore from "../../store/auth.store";
@@ -11,12 +11,17 @@ import ChatHeader from "./modules/ChatHeader";
 import MessageList from "./modules/MessageList";
 import MessageInput from "./modules/MessageInput";
 
-function ChatArea({ selectedUser, setSelectedUser }) {
+/**
+ * ChatArea component handles the main chat UI and logic.
+ */
+function ChatArea({ selectedUser, onBack }) {
+    // ====== State and Refs ======
     const { user } = authStore();
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const chatEndRef = useRef(null);
 
+    // ====== Fetch Messages When User Changes ======
     useEffect(() => {
         if (!selectedUser) return;
 
@@ -35,8 +40,10 @@ function ChatArea({ selectedUser, setSelectedUser }) {
         fetchMessages();
     }, [selectedUser]);
 
+    // ====== Listen for Incoming Messages via Socket ======
     useEffect(() => {
         const handleNewMessage = (msg) => {
+            // Only add messages relevant to the current chat
             if (
                 msg.sender === selectedUser?._id ||
                 msg.receiver === selectedUser?._id
@@ -49,10 +56,12 @@ function ChatArea({ selectedUser, setSelectedUser }) {
         return () => socket.off("newMessage", handleNewMessage);
     }, [selectedUser]);
 
+    // ====== Handle Sending a New Message ======
     const handleSend = (newMsg) => {
         setMessages((prev) => [...prev, newMsg]);
     };
 
+    // ====== Render: No User Selected ======
     if (!selectedUser) {
         return (
             <div className="flex-1 flex items-center justify-center px-4 bg-base-100">
@@ -71,18 +80,25 @@ function ChatArea({ selectedUser, setSelectedUser }) {
         );
     }
 
+    // ====== Render: Chat Area ======
     return (
         <div className="flex flex-col flex-1 h-full">
-            <ChatHeader user={selectedUser} onBack={() => setSelectedUser(null)} />
+            {/* Chat header with user info and back button */}
+            <ChatHeader user={selectedUser} onBack={onBack} />
+
+            {/* List of messages */}
             <MessageList
                 messages={messages}
                 isLoading={isLoading}
                 currentUserId={user._id}
                 chatEndRef={chatEndRef}
             />
+
+            {/* Input for sending new messages */}
             <MessageInput receiverId={selectedUser._id} onSent={handleSend} />
         </div>
     );
 }
 
 export default ChatArea;
+
