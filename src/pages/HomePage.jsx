@@ -67,7 +67,8 @@ export default function HomePage() {
         user={user}
         onLogout={authStore.getState().logout}
       />
-      <div className="flex h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] relative bg-base-100">
+
+      <div className="fixed inset-x-0 top-[3.5rem] sm:top-[4rem] bottom-0 flex bg-base-100 overflow-hidden">
         {/* ====== Sidebar Overlay (Mobile) ====== */}
         {sidebarOpen && (
           <button
@@ -90,11 +91,11 @@ export default function HomePage() {
         </aside>
 
         {/* ====== Main Chat Area ====== */}
-        <main className="flex-1 flex flex-col min-w-0">
+        <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {selectedUser ? (
             <>
               {/* ====== Chat Header ====== */}
-              <header className="px-4 sm:px-6 py-3 sm:py-4 border-b border-base-300 bg-base-100">
+              <header className="px-4 sm:px-6 py-3 sm:py-4 border-b border-base-300 bg-base-100 shrink-0">
                 <div className="flex items-center gap-3">
                   {/* Open Sidebar (Mobile) */}
                   <button
@@ -110,7 +111,7 @@ export default function HomePage() {
                       {selectedUser.username.charAt(0).toUpperCase()}
                     </div>
                     <div className="truncate">
-                      <h2 className="text-base font-medium text-base-content truncate">
+                      <h2 className="text-base font-medium truncate">
                         {selectedUser.username}
                         {selectedUser._id === user._id && " (You)"}
                       </h2>
@@ -179,7 +180,6 @@ export default function HomePage() {
           )}
         </main>
       </div>
-      );
     </>
   );
 }
