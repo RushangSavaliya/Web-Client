@@ -1,7 +1,7 @@
-// File: src/components/home/Navbar.jsx
-
 import { FaComments, FaBars } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import { Themes } from "../../const/themes";
+import useThemeStore from "../../store/theme.store";
 
 /**
  * Navbar component for the ChatApp.
@@ -21,24 +21,18 @@ function Navbar({ isLoggedIn, user, onLogout, onToggleSidebar }) {
 
       {/* ========== Logo Section ========== */}
       <div className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl font-bold text-base-content flex-1 min-w-0">
-        {/* Logo Icon */}
         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-primary text-primary-content flex items-center justify-center text-base sm:text-lg shadow-md shrink-0">
           <FaComments className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
-        {/* App Name */}
-        <span className="hidden xs:inline sm:inline truncate">
-          ChatApp
-        </span>
+        <span className="hidden xs:inline truncate">ChatApp</span>
       </div>
 
       {/* ========== User Info & Actions ========== */}
       {isLoggedIn && user && (
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-          {/* Username and Status */}
+          <ThemeSelector />
           <UserInfo username={user.username} />
-          {/* User Avatar */}
           <UserAvatar username={user.username} />
-          {/* Logout Button */}
           <LogoutButton onLogout={onLogout} />
         </div>
       )}
@@ -87,5 +81,38 @@ function LogoutButton({ onLogout }) {
   );
 }
 
-export default Navbar;
+/**
+ * Theme Selector using DaisyUI dropdown with scroll limit
+ */
+function ThemeSelector() {
+  const { theme, setTheme } = useThemeStore();
 
+  return (
+    <div className="dropdown dropdown-end">
+      <label
+        tabIndex={0}
+        className="btn btn-sm btn-outline capitalize w-[7.5rem] sm:w-36 truncate"
+      >
+        {theme}
+      </label>
+      <ul
+        tabIndex={0}
+        className="dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-[7.5rem] sm:w-36 max-h-48 overflow-y-auto flex flex-col gap-1"
+      >
+        {Themes.map((t) => (
+          <li key={t}>
+            <button
+              onClick={() => setTheme(t)}
+              className={`capitalize btn btn-sm w-full text-left ${t === theme ? "btn-primary" : "btn-ghost"
+                }`}
+            >
+              {t}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default Navbar;
