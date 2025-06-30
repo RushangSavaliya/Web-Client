@@ -1,3 +1,5 @@
+// File: src/components/home/Navbar.jsx
+
 import { FaComments, FaBars } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { Themes } from "../../const/themes";
@@ -82,7 +84,7 @@ function LogoutButton({ onLogout }) {
 }
 
 /**
- * Theme Selector using DaisyUI dropdown with scroll limit
+ * Responsive Theme Selector using Zustand store.
  */
 function ThemeSelector() {
   const { theme, setTheme } = useThemeStore();
@@ -91,19 +93,20 @@ function ThemeSelector() {
     <div className="dropdown dropdown-end">
       <label
         tabIndex={0}
-        className="btn btn-sm btn-outline capitalize w-[7.5rem] sm:w-36 truncate"
+        className="btn btn-sm btn-outline capitalize max-w-[9rem] sm:max-w-[10rem] truncate"
+        title={theme}
       >
         {theme}
       </label>
       <ul
         tabIndex={0}
-        className="dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-[7.5rem] sm:w-36 max-h-48 overflow-y-auto flex flex-col gap-1"
+        className="dropdown-content z-[1] mt-2 p-2 shadow bg-base-100 rounded-box w-[9rem] sm:w-[10rem] max-h-52 overflow-y-auto overflow-x-hidden flex flex-col gap-1"
       >
         {Themes.map((t) => (
           <li key={t}>
             <button
               onClick={() => setTheme(t)}
-              className={`capitalize btn btn-sm w-full text-left ${t === theme ? "btn-primary" : "btn-ghost"
+              className={`capitalize btn btn-sm w-full text-left truncate ${t === theme ? "btn-primary" : "btn-ghost"
                 }`}
             >
               {t}
