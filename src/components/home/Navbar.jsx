@@ -84,7 +84,7 @@ function LogoutButton({ onLogout }) {
 }
 
 /**
- * Responsive Theme Selector using Zustand store.
+ *  Theme Selector
  */
 function ThemeSelector() {
   const { theme, setTheme } = useThemeStore();
@@ -102,20 +102,33 @@ function ThemeSelector() {
         tabIndex={0}
         className="dropdown-content z-[1] mt-2 p-2 shadow bg-base-100 rounded-box w-[9rem] sm:w-[10rem] max-h-52 overflow-y-auto overflow-x-hidden flex flex-col gap-1"
       >
-        {Themes.map((t) => (
-          <li key={t}>
-            <button
-              onClick={() => setTheme(t)}
-              className={`capitalize btn btn-sm w-full text-left truncate ${t === theme ? "btn-primary" : "btn-ghost"
-                }`}
-            >
-              {t}
-            </button>
-          </li>
-        ))}
+        {Themes.map((t) => {
+          const name = typeof t === "string" ? t : t.name;
+          const icon = typeof t === "object" && t.icon;
+
+          return (
+            <li key={name}>
+              <button
+                onClick={() => setTheme(name)}
+                className={`capitalize btn btn-sm w-full text-left truncate flex items-center gap-2 ${name === theme ? "btn-primary" : "btn-ghost"
+                  }`}
+              >
+                {icon && (
+                  <img
+                    src={icon}
+                    alt={`${name} logo`}
+                    className="w-4 h-4 rounded-sm object-contain"
+                  />
+                )}
+                <span>{name}</span>
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
 }
+
 
 export default Navbar;

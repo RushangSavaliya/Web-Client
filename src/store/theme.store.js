@@ -1,20 +1,25 @@
-// File: src/store/theme.store.js
+  // File: src/store/theme.store.js
 
-import { create } from "zustand";
+  import { create } from "zustand";
 
-const useThemeStore = create((set) => ({
-  theme: localStorage.getItem("theme") || "dim",
-  setTheme: (newTheme) => {
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    set({ theme: newTheme });
-  },
-}));
+  // Helper functions
+  const getStoredTheme = () => localStorage.getItem("theme") || "nord";
 
-// Apply theme on load
-document.documentElement.setAttribute(
-  "data-theme",
-  localStorage.getItem("theme") || "dim"
-);
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  };
 
-export default useThemeStore;
+  // Zustand store
+  const useThemeStore = create((set) => ({
+    theme: getStoredTheme(),
+    setTheme: (newTheme) => {
+      applyTheme(newTheme);
+      set({ theme: newTheme });
+    },
+  }));
+
+  // Apply theme on initial load
+  applyTheme(getStoredTheme());
+
+  export default useThemeStore;

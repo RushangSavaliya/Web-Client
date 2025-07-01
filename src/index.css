@@ -1,7 +1,11 @@
-/* File: src/index.css */
-
 @import "tailwindcss";
 
-@plugin "daisyui"{
-    themes: all;
+@plugin "daisyui" {
+  themes: all;
 }
+
+/* ✅ Catppuccin themes via local plugin files */
+@plugin "./themes/CatppuccinLatte.js";
+@plugin "./themes/CatppuccinFrappe.js";
+@plugin "./themes/CatppuccinMacchiato.js";
+@plugin "./themes/CatppuccinMocha.js";
