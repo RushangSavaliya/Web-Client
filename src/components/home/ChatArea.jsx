@@ -82,7 +82,7 @@ function ChatArea({ selectedUser, onBack }) {
 
     // ====== Render: Chat Area ======
     return (
-        <div className="flex flex-col flex-1 h-full">
+        <div className="flex flex-col flex-1 h-full overflow-hidden">
             {/* Chat header with user info and back button */}
             <ChatHeader user={selectedUser} onBack={onBack} />
 
