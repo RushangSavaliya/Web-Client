@@ -1,58 +1,72 @@
 // File: src/components/home/ChatSidebar.jsx
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { FiCircle, FiMessageCircle, FiUsers, FiX } from "react-icons/fi";
 import authStore from "../../store/auth.store";
 import socket from "../../lib/socket";
-
-/* -------------------- User Sorting Helpers -------------------- */
-
-// Sort users: current user first, then online users, then offline users
-function sortUsers(users, currentUser) {
-    return users.sort((a, b) => {
-        if (a._id === currentUser?._id) return -1;
-        if (b._id === currentUser?._id) return 1;
-
-        const aOnline = users.some((u) => u._id === a._id) ? 1 : 0;
-        const bOnline = users.some((u) => u._id === b._id) ? 1 : 0;
-
-        return bOnline - aOnline;
-    });
-}
-
-// Ensure current user is always present in the list
-function getAllUsers(users, currentUser) {
-    const all = [...users];
-    if (currentUser && !all.find((u) => u._id === currentUser._id)) {
-        all.unshift({ ...currentUser, isOnline: true });
-    }
-    return sortUsers(all, currentUser);
-}
-
-/* -------------------- ChatSidebar Component -------------------- */
+import axiosInstance from "../../lib/axios";
+import useUserStore from "../../store/user.store"; // ✅ Zustand store
 
 function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
-    // -------------------- State & Store --------------------
-    const [users, setUsers] = useState([]);
     const { user: currentUser } = authStore();
 
-    // -------------------- Socket Events --------------------
-    useEffect(() => {
-        socket.on("active-users", setUsers);
-        return () => socket.off("active-users");
-    }, []);
+    // ✅ Zustand: store all and online users
+    const {
+        allUsers,
+        setAllUsers,
+        onlineUsers,
+        setOnlineUsers,
+    } = useUserStore();
 
-    // -------------------- Utility Callbacks --------------------
+    // ✅ Fetch all registered users once
+    useEffect(() => {
+        axiosInstance
+            .get("/users")
+            .then((res) => setAllUsers(res.data.users))
+            .catch(console.error);
+    }, [setAllUsers]);
+
+    // ✅ Listen to socket online users
+    useEffect(() => {
+        socket.on("active-users", setOnlineUsers);
+        return () => socket.off("active-users");
+    }, [setOnlineUsers]);
+
+    // ✅ Check if user is online
     const isOnline = useCallback(
-        (id) => users.some((u) => u._id === id),
-        [users]
+        (id) => onlineUsers.some((u) => u._id === id),
+        [onlineUsers]
     );
+
     const isSelf = useCallback(
         (id) => currentUser?._id === id,
         [currentUser]
     );
 
-    // -------------------- Styling Helpers --------------------
+    // ✅ Merged and sorted user list
+    const getAllSortedUsers = () => {
+        const merged = [...allUsers];
+
+        // Add self if not included
+        if (
+            currentUser &&
+            !merged.some((u) => u._id === currentUser._id)
+        ) {
+            merged.unshift(currentUser);
+        }
+
+        // Sort: self → online → offline
+        return merged.sort((a, b) => {
+            if (a._id === currentUser?._id) return -1;
+            if (b._id === currentUser?._id) return 1;
+
+            const aOnline = isOnline(a._id) ? 1 : 0;
+            const bOnline = isOnline(b._id) ? 1 : 0;
+
+            return bOnline - aOnline;
+        });
+    };
+
     const getUserRowClass = (active, self) =>
         [
             "list-row items-center rounded-xl transition-colors cursor-pointer select-none",
@@ -88,7 +102,6 @@ function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
             active ? "text-primary-content/70" : "text-base-content/60",
         ].join(" ");
 
-    // -------------------- User Row Component --------------------
     function UserRow({ user }) {
         const online = isOnline(user._id);
         const self = isSelf(user._id);
@@ -109,7 +122,6 @@ function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                 role="button"
                 aria-pressed={active}
             >
-                {/* Avatar */}
                 <div className={getAvatarClass(active, self)} aria-hidden="true">
                     {user.username.charAt(0).toUpperCase()}
                     {self && (
@@ -119,7 +131,6 @@ function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                     )}
                 </div>
 
-                {/* User Info */}
                 <div className="list-col-grow min-w-0">
                     <div className="font-semibold truncate text-sm sm:text-base">
                         {user.username} {self && "(You)"}
@@ -133,10 +144,8 @@ function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
         );
     }
 
-    // -------------------- Render --------------------
     return (
         <>
-            {/* Overlay for mobile */}
             {isOpen && (
                 <div
                     className="fixed inset-0 bg-black/50 z-40 md:hidden cursor-pointer"
@@ -146,12 +155,12 @@ function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
             )}
 
             <aside
-                className={`fixed md:static inset-y-0 left-0 z-50 w-80 sm:w-96 border-r border-base-300 bg-base-100 transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-                    }`}
+                className={`fixed md:static inset-y-0 left-0 z-50 w-80 sm:w-96 border-r border-base-300 bg-base-100 transition-transform duration-300 ease-in-out ${
+                    isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                }`}
                 aria-label="Contacts sidebar"
             >
                 <div className="h-full flex flex-col bg-base-100">
-                    {/* -------- Header -------- */}
                     <div className="p-4 sm:p-5 border-b border-base-300 bg-base-100 sticky top-0 z-10 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <div className="bg-primary text-primary-content p-2 rounded-lg shadow-sm">
@@ -168,16 +177,14 @@ function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                         </button>
                     </div>
 
-                    {/* -------- User List -------- */}
                     <div className="flex-1 overflow-y-auto p-3">
                         <ul className="list space-y-2" role="list">
-                            {getAllUsers(users, currentUser).map((user) => (
+                            {getAllSortedUsers().map((user) => (
                                 <UserRow key={user._id} user={user} />
                             ))}
                         </ul>
                     </div>
 
-                    {/* -------- Mobile Footer -------- */}
                     <div className="p-3 border-t border-base-300 bg-base-50 md:hidden">
                         <p className="text-xs text-base-content/50 text-center select-none">
                             Tap a user to start chatting
@@ -190,4 +197,3 @@ function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
 }
 
 export default ChatSidebar;
-
