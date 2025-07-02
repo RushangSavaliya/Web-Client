@@ -1,9 +1,5 @@
 // File: src/components/MessageBubble.jsx
 
-// =======================
-// MessageBubble Component
-// =======================
-
 function MessageBubble({ message, isOwn }) {
   // Format timestamp to HH:MM
   const formatTime = (timestamp) =>
@@ -19,13 +15,6 @@ function MessageBubble({ message, isOwn }) {
 
   return (
     <div className={`chat ${isOwn ? "chat-end" : "chat-start"}`}>
-      {/* Show sender name for received messages */}
-      {!isOwn && (
-        <div className="chat-header text-sm font-semibold text-base-content">
-          {message.senderName}
-        </div>
-      )}
-
       <div
         className={[
           "chat-bubble",
