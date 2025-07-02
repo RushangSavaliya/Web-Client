@@ -36,20 +36,14 @@ function MessageList({ messages, isLoading, currentUserId, chatEndRef }) {
         );
     }
 
-    // Helper to determine if avatar should be shown
-    const shouldShowAvatar = (msg, idx) =>
-        idx === 0 || messages[idx - 1].sender !== msg.sender;
-
-    // Messages list
     return (
         <div className={containerClass}>
             <div className="space-y-3 sm:space-y-4 pb-4">
-                {messages.map((msg, idx) => (
+                {messages.map((msg) => (
                     <MessageBubble
                         key={msg._id}
                         message={msg}
                         isOwn={msg.sender === currentUserId}
-                        showAvatar={shouldShowAvatar(msg, idx)}
                     />
                 ))}
                 <div ref={chatEndRef} />
