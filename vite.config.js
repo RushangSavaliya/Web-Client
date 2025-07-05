@@ -1,4 +1,4 @@
-// FIle: vite.config.js
+// File: vite.config.js
 
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
