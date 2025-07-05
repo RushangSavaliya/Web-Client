@@ -1,9 +1,9 @@
 // File: src/components/home/Navbar.jsx
 
 import { FaComments, FaBars } from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
 import { Themes } from "../../const/themes";
 import useThemeStore from "../../store/theme.store";
+import LogoutButton from "./modules/LogoutButton";
 
 /**
  * Navbar component for the ChatApp.
@@ -68,23 +68,7 @@ function UserAvatar({ username }) {
 }
 
 /**
- * Logout button with icon.
- */
-function LogoutButton({ onLogout }) {
-  return (
-    <button
-      onClick={onLogout}
-      className="btn btn-ghost btn-sm h-9 w-9 p-0 hover:bg-base-200"
-      title="Logout"
-      aria-label="Logout"
-    >
-      <FiLogOut className="w-4 h-4 text-base-content" />
-    </button>
-  );
-}
-
-/**
- *  Theme Selector
+ * Theme Selector
  */
 function ThemeSelector() {
   const { theme, setTheme } = useThemeStore();
@@ -129,6 +113,5 @@ function ThemeSelector() {
     </div>
   );
 }
-
 
 export default Navbar;
