@@ -1,33 +1,40 @@
 // File: src/pages/RegisterPage.jsx
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaComments, FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import axiosInstance from "../lib/axios";
 
 /**
- * RegisterPage - User registration form page
+ * RegisterPage - Handles user registration UI and logic
  */
 function RegisterPage() {
-  // --- State ---
+  // -------------------------------
+  // State Management
+  // -------------------------------
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // --- Refs & Navigation ---
+  // -------------------------------
+  // Refs & Router
+  // -------------------------------
   const usernameRef = useRef(null);
   const navigate = useNavigate();
 
-  // --- Effects ---
-  // Autofocus username input on mount
+  // -------------------------------
+  // Effects
+  // -------------------------------
   useEffect(() => {
     usernameRef.current?.focus();
   }, []);
 
-  // --- Validation ---
+  // -------------------------------
+  // Form Validation
+  // -------------------------------
   const validate = useCallback(() => {
     const errs = {};
     const { username, email, password } = form;
@@ -48,36 +55,39 @@ function RegisterPage() {
     return Object.keys(errs).length === 0;
   }, [form]);
 
-  // --- Handlers ---
-  // Handle input changes
-  const handleChange = useCallback((e) => {
+  // -------------------------------
+  // Input Change Handler
+  // -------------------------------
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
-  }, []);
+  };
 
-  // Handle form submit
-  const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-      if (loading || !validate()) return;
-      setLoading(true);
-      try {
-        await axiosInstance.post("/auth/register", form);
-        navigate("/login");
-      } catch (err) {
-        toast.error(err.response?.data?.error || "Registration failed");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [form, loading, navigate, validate]
-  );
+  // -------------------------------
+  // Form Submit Handler
+  // -------------------------------
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (loading || !validate()) return;
 
-  // --- Render ---
+    setLoading(true);
+    try {
+      await axiosInstance.post("/auth/register", form);
+      navigate("/login");
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // -------------------------------
+  // UI Rendering
+  // -------------------------------
   return (
     <div className="min-h-screen bg-base-200 flex flex-col">
-      {/* Main Content */}
+      {/* --------- Main Content --------- */}
       <main className="flex-grow flex justify-center items-center px-4 py-8">
         <section className="w-full max-w-lg md:max-w-xl mx-auto">
           {/* Header */}
@@ -88,7 +98,7 @@ function RegisterPage() {
             <h1 className="text-xl md:text-2xl font-medium leading-tight">Create account</h1>
           </div>
 
-          {/* Registration Form */}
+          {/* Form */}
           <form
             onSubmit={handleSubmit}
             autoComplete="on"
@@ -137,6 +147,7 @@ function RegisterPage() {
                 autoComplete="new-password"
               />
               <span>Password</span>
+
               {/* Toggle password visibility */}
               <button
                 type="button"
@@ -147,6 +158,7 @@ function RegisterPage() {
               >
                 {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
               </button>
+
               {errors.password && <p className="validator-hint text-error">{errors.password}</p>}
             </label>
 
@@ -159,7 +171,7 @@ function RegisterPage() {
               {loading ? <span className="loading loading-spinner loading-sm" /> : "Register"}
             </button>
 
-            {/* Login Link */}
+            {/* Login Redirect */}
             <p className="text-center text-sm">
               Have an account?{" "}
               <Link to="/login" className="link text-primary font-medium">Login</Link>
@@ -168,11 +180,10 @@ function RegisterPage() {
         </section>
       </main>
 
-      {/* Footer */}
+      {/* --------- Footer --------- */}
       <Footer />
     </div>
   );
 }
 
 export default RegisterPage;
-

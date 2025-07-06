@@ -1,31 +1,40 @@
 // File: src/pages/LoginPage.jsx
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaComments, FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import axiosInstance from "../lib/axios";
 
 /**
- * LoginPage component handles user authentication.
+ * LoginPage - Handles user authentication
  */
 function LoginPage({ onLogin }) {
-  // -------------------- State & Refs --------------------
+  // -------------------------------
+  // State Management
+  // -------------------------------
   const [form, setForm] = useState({ identifier: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+
+  // -------------------------------
+  // Refs & Router
+  // -------------------------------
   const identifierRef = useRef(null);
   const navigate = useNavigate();
 
-  // -------------------- Effects --------------------
-  // Focus on identifier input on mount
+  // -------------------------------
+  // Effects
+  // -------------------------------
   useEffect(() => {
     identifierRef.current?.focus();
   }, []);
 
-  // -------------------- Validation --------------------
+  // -------------------------------
+  // Validation
+  // -------------------------------
   const validate = useCallback(() => {
     const errs = {};
     if (!form.identifier.trim()) errs.identifier = "Required";
@@ -34,43 +43,45 @@ function LoginPage({ onLogin }) {
     return Object.keys(errs).length === 0;
   }, [form]);
 
-  // -------------------- Handlers --------------------
-  // Handle input changes
-  const handleChange = useCallback((e) => {
+  // -------------------------------
+  // Input Change Handler
+  // -------------------------------
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
-  }, []);
+  };
 
-  // Handle form submission
-  const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-      if (loading || !validate()) return;
-      setLoading(true);
-      try {
-        // Attempt login
-        const res = await axiosInstance.post("/auth/login", {
-          usernameORemail: form.identifier,
-          password: form.password,
-        });
-        // Pass token to parent
-        const success = await onLogin(res.data.token);
-        if (success) navigate("/");
-        else toast.error("Session validation failed");
-      } catch (err) {
-        toast.error(err.response?.data?.error || "Login failed");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [form, loading, navigate, onLogin, validate]
-  );
+  // -------------------------------
+  // Form Submit Handler
+  // -------------------------------
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (loading || !validate()) return;
 
-  // -------------------- Render --------------------
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post("/auth/login", {
+        usernameORemail: form.identifier,
+        password: form.password,
+      });
+
+      const success = await onLogin(res.data.token);
+      if (success) navigate("/");
+      else toast.error("Session validation failed");
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // -------------------------------
+  // UI Rendering
+  // -------------------------------
   return (
     <div className="min-h-screen bg-base-200 flex flex-col">
-      {/* Main Content */}
+      {/* --------- Main Content --------- */}
       <main className="flex-grow flex justify-center items-center px-4 py-8">
         <section className="w-full max-w-lg md:max-w-xl mx-auto">
           {/* Header */}
@@ -119,6 +130,7 @@ function LoginPage({ onLogin }) {
                 autoComplete="current-password"
               />
               <span>Password</span>
+
               {/* Toggle Password Visibility */}
               <button
                 type="button"
@@ -129,6 +141,7 @@ function LoginPage({ onLogin }) {
               >
                 {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
               </button>
+
               {errors.password && (
                 <p className="validator-hint text-error">{errors.password}</p>
               )}
@@ -158,11 +171,10 @@ function LoginPage({ onLogin }) {
         </section>
       </main>
 
-      {/* Footer */}
+      {/* --------- Footer --------- */}
       <Footer />
     </div>
   );
 }
 
 export default LoginPage;
-
