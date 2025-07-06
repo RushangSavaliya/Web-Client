@@ -1,3 +1,5 @@
+/* File: index.css */
+
 @import "tailwindcss";
 
 @plugin "daisyui" {
@@ -5,5 +7,9 @@
 }
 
 /*  Catppuccin themes  */
-@plugin "./themes/CatppuccinThemes.js";
 
+
+@plugin "./themes/latte.js";
+@plugin "./themes/frappe.js";
+@plugin "./themes/macchiato.js";
+@plugin "./themes/mocha.js";
