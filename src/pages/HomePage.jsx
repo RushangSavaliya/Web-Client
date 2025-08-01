@@ -46,7 +46,7 @@ function HomePage() {
       />
 
       {/* Main Layout */}
-      <div className="fixed inset-x-0 top-[3.5rem] sm:top-[4rem] bottom-0 flex bg-base-100 overflow-hidden">
+      <div className="fixed inset-x-0 top-[3.5rem] sm:top-[4rem] bottom-0 flex bg-white dark:bg-gray-800 overflow-hidden">
         {/* Sidebar: Chat contacts */}
         <ChatSidebar
           isOpen={sidebarOpen}
@@ -69,5 +69,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-

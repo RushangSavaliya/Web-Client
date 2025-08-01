@@ -20,7 +20,7 @@ const App = () => {
   }, [token, login]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-base-200 text-base-content flex flex-col">
+    <div className="h-screen w-screen overflow-hidden bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
       {/* --- Toast Notifications --- */}
       <Toaster position="top-center" />
 
