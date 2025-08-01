@@ -10,8 +10,8 @@ function MessageBubble({ message, isOwn }) {
 
   // Bubble style based on sender
   const bubbleClass = isOwn
-    ? "bg-blue-600 text-white"
-    : "bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-gray-100";
+    ? "message-bubble-out"
+    : "message-bubble-in";
 
   return (
     <div className={`flex ${isOwn ? "justify-end" : "justify-start"} mb-4`}>
