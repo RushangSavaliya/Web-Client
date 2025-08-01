@@ -10,20 +10,21 @@ function MessageBubble({ message, isOwn }) {
 
   // Bubble style based on sender
   const bubbleClass = isOwn
-    ? "chat-bubble-primary text-primary-content"
-    : "chat-bubble-neutral text-neutral-content";
+    ? "bg-blue-600 text-white"
+    : "bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-gray-100";
 
   return (
-    <div className={`chat ${isOwn ? "chat-end" : "chat-start"}`}>
+    <div className={`flex ${isOwn ? "justify-end" : "justify-start"} mb-4`}>
       <div
         className={[
-          "chat-bubble",
+          "rounded-2xl shadow-sm",
           "max-w-xs sm:max-w-sm md:max-w-md",
           "break-words whitespace-pre-wrap",
           "px-4 py-2",
           "text-sm sm:text-base",
           "flex flex-col gap-1",
           bubbleClass,
+          isOwn ? "rounded-br-md" : "rounded-bl-md",
         ].join(" ")}
       >
         {/* Message Content */}
