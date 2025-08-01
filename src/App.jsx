@@ -7,11 +7,15 @@ import RegisterPage from "./components/auth/RegisterPage";
 import authStore from "./store/auth.store";
 
 const App = () => {
-  const { token, isLoggedIn, login } = authStore();
+  const { token, isLoggedIn, login, initializeSocket } = authStore();
 
   useEffect(() => {
-    if (token) login(token);
-  }, [token, login]);
+    if (token) {
+      login(token);
+    }
+    // Initialize socket connection if user is already logged in
+    initializeSocket();
+  }, [token, login, initializeSocket]);
 
   return (
     <div className="app">

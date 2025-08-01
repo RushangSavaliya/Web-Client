@@ -13,20 +13,69 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
 
   // Fetch all users
   useEffect(() => {
-    axiosInstance
-      .get("/users")
-      .then((res) => setAllUsers(res.data.users))
-      .catch(console.error);
+    const fetchUsers = async () => {
+      try {
+        const res = await axiosInstance.get("/users");
+        console.log("Fetched users:", res.data.users);
+        setAllUsers(res.data.users);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    };
+
+    fetchUsers();
   }, [setAllUsers]);
 
-  // Listen to online users
+  // Listen to socket events for online users
   useEffect(() => {
-    socket.on("active-users", setOnlineUsers);
-    return () => socket.off("active-users");
+    const handleActiveUsers = (users) => {
+      console.log("Active users received:", users);
+      setOnlineUsers(users || []);
+    };
+
+    const handleUserOnline = (user) => {
+      console.log("User came online:", user);
+      setOnlineUsers(prev => {
+        const exists = prev.find(u => u._id === user._id);
+        if (!exists) {
+          return [...prev, user];
+        }
+        return prev;
+      });
+    };
+
+    const handleUserOffline = (userId) => {
+      console.log("User went offline:", userId);
+      setOnlineUsers(prev => prev.filter(u => u._id !== userId));
+    };
+
+    // Socket event listeners
+    socket.on("active-users", handleActiveUsers);
+    socket.on("userOnline", handleUserOnline);
+    socket.on("userOffline", handleUserOffline);
+
+    // Request current active users on mount
+    socket.emit("getActiveUsers");
+
+    // Cleanup
+    return () => {
+      socket.off("active-users", handleActiveUsers);
+      socket.off("userOnline", handleUserOnline);
+      socket.off("userOffline", handleUserOffline);
+    };
   }, [setOnlineUsers]);
 
+  // Debug: Log online users changes
+  useEffect(() => {
+    console.log("Online users updated:", onlineUsers);
+  }, [onlineUsers]);
+
   const isOnline = useCallback(
-    (id) => onlineUsers.some((u) => u._id === id),
+    (id) => {
+      const online = onlineUsers.some((u) => u._id === id);
+      console.log(`User ${id} is ${online ? 'online' : 'offline'}`);
+      return online;
+    },
     [onlineUsers]
   );
 
@@ -76,6 +125,9 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
             <FiUsers size={16} />
           </div>
           <span>Contacts</span>
+          <span className="text-xs opacity-50 ml-2">
+            ({onlineUsers.length} online)
+          </span>
         </div>
         
         <Button

@@ -1,27 +1,14 @@
-// File: src/store/auth.store.js
-
-// =======================
-// Imports
-// =======================
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
+import socket from "../lib/socket";
 
-// =======================
-// Auth Store Definition
-// =======================
-const authStore = create((set) => ({
-    // =======================
+const authStore = create((set, get) => ({
     // State
-    // =======================
     token: localStorage.getItem("token") || null,
     isLoggedIn: !!localStorage.getItem("token"),
-    user: null, // 👈 Add user state
+    user: null,
 
-    // =======================
     // Actions
-    // =======================
-
-    // ---- Login Action ----
     login: async (token) => {
         if (!token) return false;
 
@@ -33,30 +20,46 @@ const authStore = create((set) => ({
             const user = res.data?.user;
             if (user) {
                 set({ user });
+                
+                // Connect socket with the new token
+                socket.connect(token);
+                
+                console.log("User logged in successfully:", user.username);
                 return true;
             }
             throw new Error("Invalid session");
-        } catch {
+        } catch (error) {
+            console.error("Login failed:", error);
             localStorage.removeItem("token");
             set({ token: null, isLoggedIn: false, user: null });
+            socket.disconnect();
             return false;
         }
     },
 
-    // ---- Logout Action ----
     logout: async () => {
         try {
             await axiosInstance.post("/auth/logout");
         } catch (error) {
-            console.error("Logout failed:", error);
+            console.error("Logout API failed:", error);
         } finally {
             localStorage.removeItem("token");
             set({ token: null, isLoggedIn: false, user: null });
+            
+            // Disconnect socket
+            socket.disconnect();
+            
+            console.log("User logged out successfully");
+        }
+    },
+
+    // Initialize socket connection on app start if token exists
+    initializeSocket: () => {
+        const { token } = get();
+        if (token) {
+            socket.connect(token);
         }
     },
 }));
 
-// =======================
-// Export
-// =======================
 export default authStore;
