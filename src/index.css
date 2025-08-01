@@ -21,7 +21,7 @@
 }
 
 /* Dark theme colors */
-[data-theme="dark"] {
+.dark {
   --color-primary: #3b82f6;
   --color-primary-hover: #60a5fa;
   --color-primary-content: #ffffff;
@@ -149,7 +149,7 @@
 }
 
 .chat-bubble-neutral {
-  @apply bg-gray-200 text-gray-900;
+  @apply bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-gray-100;
 }
 
 /* Floating label styles */
@@ -176,39 +176,65 @@
 }
 
 /* Theme utilities */
-.bg-base-100 { @apply bg-white dark:bg-gray-800; }
-.bg-base-200 { @apply bg-gray-50 dark:bg-gray-900; }
-.bg-base-300 { @apply bg-gray-200 dark:bg-gray-700; }
-.bg-base-50 { @apply bg-gray-50 dark:bg-gray-900; }
+.bg-base-100 { 
+  @apply bg-white dark:bg-gray-800; 
+}
 
-.text-base-content { @apply text-gray-900 dark:text-gray-100; }
-.text-base-content\/60 { @apply text-gray-500 dark:text-gray-400; }
-.text-base-content\/70 { @apply text-gray-400 dark:text-gray-300; }
-.text-base-content\/50 { @apply text-gray-500 dark:text-gray-500; }
-.text-base-content\/30 { @apply text-gray-600 dark:text-gray-600; }
+.bg-base-200 { 
+  @apply bg-gray-50 dark:bg-gray-900; 
+}
 
-.border-base-300 { @apply border-gray-200 dark:border-gray-600; }
+.bg-base-300 { 
+  @apply bg-gray-200 dark:bg-gray-700; 
+}
 
-.bg-primary { @apply bg-blue-600; }
-.text-primary { @apply text-blue-600; }
-.text-primary-content { @apply text-white; }
-.text-primary-content\/70 { @apply text-blue-100; }
-.text-primary-content\/50 { @apply text-blue-200; }
-.bg-primary-content { @apply bg-white; }
-.border-primary { @apply border-blue-600; }
-.border-primary\/30 { @apply border-blue-200; }
-.border-primary\/50 { @apply border-blue-300; }
-.bg-primary\/10 { @apply bg-blue-50; }
-.bg-primary\/20 { @apply bg-blue-100; }
+.bg-base-50 { 
+  @apply bg-gray-50 dark:bg-gray-900; 
+}
 
-.text-neutral-content { @apply text-white; }
-.bg-neutral { @apply bg-gray-600; }
+.text-base-content { 
+  @apply text-gray-900 dark:text-gray-100; 
+}
 
-.text-error { @apply text-red-500; }
-.text-success { @apply text-green-500; }
+.border-base-300 { 
+  @apply border-gray-200 dark:border-gray-600; 
+}
 
-.hover\:bg-primary:hover { @apply bg-blue-600; }
-.hover\:text-primary:hover { @apply text-blue-600; }
+.bg-primary { 
+  @apply bg-blue-600; 
+}
+
+.text-primary { 
+  @apply text-blue-600; 
+}
+
+.text-primary-content { 
+  @apply text-white; 
+}
+
+.bg-primary-content { 
+  @apply bg-white; 
+}
+
+.border-primary { 
+  @apply border-blue-600; 
+}
+
+.text-neutral-content { 
+  @apply text-white; 
+}
+
+.bg-neutral { 
+  @apply bg-gray-600; 
+}
+
+.text-error { 
+  @apply text-red-500; 
+}
+
+.text-success { 
+  @apply text-green-500; 
+}
 
 /* Dropdown styles */
 .dropdown {
