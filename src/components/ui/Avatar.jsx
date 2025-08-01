@@ -1,22 +1,9 @@
-const Avatar = ({ 
-  username, 
-  size = "md", 
-  className = "",
-  online = false,
-  showIndicator = false 
-}) => {
-  const sizeClasses = {
-    sm: "avatar sm",
-    md: "avatar",
-    lg: "avatar lg",
-  };
+const Avatar = ({ username, size = "md", className = "" }) => {
+  const sizeClass = size === "sm" ? "avatar sm" : "avatar";
 
   return (
-    <div className={`${sizeClasses[size]} ${className}`}>
+    <div className={`${sizeClass} ${className}`}>
       {username?.charAt(0)?.toUpperCase() || "?"}
-      {showIndicator && (
-        <div className={`status-indicator ${online ? "" : "offline"}`} />
-      )}
     </div>
   );
 };

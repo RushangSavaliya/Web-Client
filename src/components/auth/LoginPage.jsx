@@ -2,9 +2,6 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaComments, FaEye, FaEyeSlash } from "react-icons/fa";
-import Button from "../ui/Button";
-import Input from "../ui/Input";
-import Footer from "../ui/Footer";
 import axiosInstance from "../../lib/axios";
 
 function LoginPage({ onLogin }) {
@@ -22,8 +19,8 @@ function LoginPage({ onLogin }) {
 
   const validate = useCallback(() => {
     const errs = {};
-    if (!form.identifier.trim()) errs.identifier = "Email or username is required";
-    if (!form.password) errs.password = "Password is required";
+    if (!form.identifier.trim()) errs.identifier = "Required";
+    if (!form.password) errs.password = "Required";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }, [form]);
@@ -49,7 +46,6 @@ function LoginPage({ onLogin }) {
 
       const success = await onLogin(res.data.token);
       if (success) {
-        toast.success("Welcome back!");
         navigate("/");
       } else {
         toast.error("Session validation failed");
@@ -62,68 +58,74 @@ function LoginPage({ onLogin }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="form-container">
         <div className="form-header">
           <div className="form-icon">
             <FaComments />
           </div>
-          <h1 className="form-title">Welcome Back</h1>
-          <p className="text-sm opacity-75 mt-2">Sign in to continue chatting</p>
+          <h1 className="form-title">Sign In</h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="form-container">
-          <Input
-            ref={identifierRef}
-            name="identifier"
-            label="Email or Username"
-            value={form.identifier}
-            onChange={handleChange}
-            error={errors.identifier}
-            autoComplete="username"
-            autoCapitalize="none"
-          />
-
-          <div className="relative">
-            <Input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              label="Password"
-              value={form.password}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <input
+              ref={identifierRef}
+              name="identifier"
+              className={`input ${errors.identifier ? "input-error" : ""}`}
+              placeholder=" "
+              value={form.identifier}
               onChange={handleChange}
-              error={errors.password}
-              autoComplete="current-password"
+              autoComplete="username"
             />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded opacity-60 hover:opacity-100 transition-opacity"
-              onClick={() => setShowPassword(!showPassword)}
-              tabIndex={-1}
-              aria-label="Toggle password visibility"
-            >
-              {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
-            </button>
+            <label className="form-label">Username or Email</label>
+            {errors.identifier && (
+              <div className="form-error">{errors.identifier}</div>
+            )}
           </div>
 
-          <Button
+          <div className="form-group">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className={`input ${errors.password ? "input-error" : ""}`}
+                placeholder=" "
+                value={form.password}
+                onChange={handleChange}
+                autoComplete="current-password"
+              />
+              <label className="form-label">Password</label>
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 opacity-60 hover:opacity-100"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
+              </button>
+            </div>
+            {errors.password && (
+              <div className="form-error">{errors.password}</div>
+            )}
+          </div>
+
+          <button
             type="submit"
-            loading={loading}
-            disabled={!form.identifier || !form.password}
-            className="w-full"
+            className="btn btn-primary w-full"
+            disabled={loading || !form.identifier || !form.password}
           >
-            Sign In
-          </Button>
+            {loading ? <div className="loading-spinner" /> : "Sign In"}
+          </button>
 
           <div className="form-footer">
             Don't have an account?{" "}
-            <Link to="/register" className="link font-medium">
+            <Link to="/register" className="link">
               Sign up
             </Link>
           </div>
         </form>
       </div>
-      
-      <Footer />
     </div>
   );
 }

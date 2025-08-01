@@ -8,9 +8,7 @@ function MessageBubble({ message, isOwn }) {
   return (
     <div className={`message ${isOwn ? "sent" : "received"}`}>
       <div className={`message-bubble ${isOwn ? "sent" : "received"}`}>
-        <div className="message-content">
-          {message.content}
-        </div>
+        {message.content}
         <div className="message-time">
           {formatTime(message.createdAt)}
         </div>

@@ -2,7 +2,6 @@ import { BsChatDots } from "react-icons/bs";
 import MessageBubble from "./MessageBubble";
 
 function MessageList({ messages, isLoading, currentUserId, chatEndRef }) {
-  // Loading state
   if (isLoading) {
     return (
       <div className="chat-messages">
@@ -17,7 +16,6 @@ function MessageList({ messages, isLoading, currentUserId, chatEndRef }) {
     );
   }
 
-  // Empty state
   if (!messages.length) {
     return (
       <div className="chat-messages">
@@ -27,7 +25,7 @@ function MessageList({ messages, isLoading, currentUserId, chatEndRef }) {
           </div>
           <h3 className="empty-state-title">No messages yet</h3>
           <p className="empty-state-description">
-            Start the conversation by sending a message below
+            Send a message to start the conversation
           </p>
         </div>
       </div>

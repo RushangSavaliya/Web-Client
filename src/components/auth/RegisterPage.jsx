@@ -2,9 +2,6 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaComments, FaEye, FaEyeSlash } from "react-icons/fa";
-import Button from "../ui/Button";
-import Input from "../ui/Input";
-import Footer from "../ui/Footer";
 import axiosInstance from "../../lib/axios";
 
 function RegisterPage() {
@@ -25,21 +22,21 @@ function RegisterPage() {
     const { username, email, password } = form;
 
     if (!username.trim()) {
-      errs.username = "Username is required";
-    } else if (username.length < 3 || username.length > 20) {
-      errs.username = "Username must be 3-20 characters";
+      errs.username = "Required";
+    } else if (username.length < 3) {
+      errs.username = "Too short";
     }
 
     if (!email.trim()) {
-      errs.email = "Email is required";
+      errs.email = "Required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errs.email = "Please enter a valid email";
+      errs.email = "Invalid email";
     }
 
     if (!password) {
-      errs.password = "Password is required";
+      errs.password = "Required";
     } else if (password.length < 8) {
-      errs.password = "Password must be at least 8 characters";
+      errs.password = "Too short";
     }
 
     setErrors(errs);
@@ -61,7 +58,7 @@ function RegisterPage() {
     setLoading(true);
     try {
       await axiosInstance.post("/auth/register", form);
-      toast.success("Account created successfully!");
+      toast.success("Account created!");
       navigate("/login");
     } catch (err) {
       toast.error(err.response?.data?.error || "Registration failed");
@@ -71,79 +68,90 @@ function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="form-container">
         <div className="form-header">
           <div className="form-icon">
             <FaComments />
           </div>
-          <h1 className="form-title">Create Account</h1>
-          <p className="text-sm opacity-75 mt-2">Join the conversation today</p>
+          <h1 className="form-title">Sign Up</h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="form-container">
-          <Input
-            ref={usernameRef}
-            name="username"
-            label="Username"
-            value={form.username}
-            onChange={handleChange}
-            error={errors.username}
-            autoComplete="username"
-            autoCapitalize="none"
-          />
-
-          <Input
-            type="email"
-            name="email"
-            label="Email"
-            value={form.email}
-            onChange={handleChange}
-            error={errors.email}
-            autoComplete="email"
-            autoCapitalize="none"
-          />
-
-          <div className="relative">
-            <Input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              label="Password"
-              value={form.password}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <input
+              ref={usernameRef}
+              name="username"
+              className={`input ${errors.username ? "input-error" : ""}`}
+              placeholder=" "
+              value={form.username}
               onChange={handleChange}
-              error={errors.password}
-              autoComplete="new-password"
+              autoComplete="username"
             />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded opacity-60 hover:opacity-100 transition-opacity"
-              onClick={() => setShowPassword(!showPassword)}
-              tabIndex={-1}
-              aria-label="Toggle password visibility"
-            >
-              {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
-            </button>
+            <label className="form-label">Username</label>
+            {errors.username && (
+              <div className="form-error">{errors.username}</div>
+            )}
           </div>
 
-          <Button
+          <div className="form-group">
+            <input
+              type="email"
+              name="email"
+              className={`input ${errors.email ? "input-error" : ""}`}
+              placeholder=" "
+              value={form.email}
+              onChange={handleChange}
+              autoComplete="email"
+            />
+            <label className="form-label">Email</label>
+            {errors.email && (
+              <div className="form-error">{errors.email}</div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className={`input ${errors.password ? "input-error" : ""}`}
+                placeholder=" "
+                value={form.password}
+                onChange={handleChange}
+                autoComplete="new-password"
+              />
+              <label className="form-label">Password</label>
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 opacity-60 hover:opacity-100"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
+              </button>
+            </div>
+            {errors.password && (
+              <div className="form-error">{errors.password}</div>
+            )}
+          </div>
+
+          <button
             type="submit"
-            loading={loading}
-            disabled={!form.username || !form.email || !form.password}
-            className="w-full"
+            className="btn btn-primary w-full"
+            disabled={loading || !form.username || !form.email || !form.password}
           >
-            Create Account
-          </Button>
+            {loading ? <div className="loading-spinner" /> : "Sign Up"}
+          </button>
 
           <div className="form-footer">
             Already have an account?{" "}
-            <Link to="/login" className="link font-medium">
+            <Link to="/login" className="link">
               Sign in
             </Link>
           </div>
         </form>
       </div>
-      
-      <Footer />
     </div>
   );
 }
