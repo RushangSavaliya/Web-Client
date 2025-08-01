@@ -11,7 +11,7 @@ function UserAvatar({ username, size = "md" }) {
 
   return (
     <div
-      className={`rounded-full bg-gray-600 text-white flex items-center justify-center font-medium shadow-inner shrink-0 ${appliedSize}`}
+      className={`avatar rounded-full flex items-center justify-center font-medium shadow-inner shrink-0 ${appliedSize}`}
     >
       {username?.charAt(0).toUpperCase()}
     </div>

@@ -34,12 +34,12 @@ function LogoutButton({ onLogout }) {
     <button
       onClick={handleLogout}
       disabled={loading}
-      className="inline-flex items-center justify-center rounded-lg p-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none h-8 w-8 sm:h-9 sm:w-9 p-0 touch-manipulation dark:text-gray-300 dark:hover:bg-gray-700"
+      className="btn btn-ghost btn-sm h-8 w-8 sm:h-9 sm:w-9 p-0 touch-manipulation"
       title="Logout"
       aria-label="Logout"
     >
       {loading ? (
-        <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />
+        <div className="loading-spinner w-3 h-3" />
       ) : (
         <FiLogOut className="w-4 h-4" />
       )}
