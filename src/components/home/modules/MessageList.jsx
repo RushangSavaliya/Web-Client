@@ -5,7 +5,7 @@ import { BsChatDots } from "react-icons/bs";
 
 function MessageList({ messages, isLoading, currentUserId, chatEndRef }) {
     const containerClass =
-        "flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 bg-gray-25 dark:bg-gray-850";
+        "flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 bg-gray-50 dark:bg-gray-900";
 
     // Loading state
     if (isLoading) {

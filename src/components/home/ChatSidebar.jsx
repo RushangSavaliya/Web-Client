@@ -185,7 +185,7 @@ function ChatSidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                         </ul>
                     </div>
 
-                    <div className="p-3 border-t border-gray-200 dark:border-gray-600 bg-gray-25 dark:bg-gray-850 md:hidden">
+                    <div className="p-3 border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 md:hidden">
                         <p className="text-xs text-gray-500 dark:text-gray-500 text-center select-none">
                             Tap a user to start chatting
                         </p>
