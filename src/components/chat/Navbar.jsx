@@ -1,4 +1,5 @@
-import { FaComments, FaBars, FiLogOut } from "react-icons/fa";
+import { FaComments, FaBars } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
 import authStore from "../../store/auth.store";
 
