@@ -1,62 +1,46 @@
-// File: src/App.jsx
-
-// --- Imports ---
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./components/chat/HomePage";
+import LoginPage from "./components/auth/LoginPage";
+import RegisterPage from "./components/auth/RegisterPage";
 import authStore from "./store/auth.store";
 
-// --- Main App Component ---
 const App = () => {
-  // --- Auth Store State & Actions ---
   const { token, isLoggedIn, login } = authStore();
 
-  // --- Effect: Auto-login if token exists ---
   useEffect(() => {
     if (token) login(token);
   }, [token, login]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-telegram-primary text-telegram-primary flex flex-col">
-      {/* --- Toast Notifications --- */}
-      <Toaster position="top-center" />
+    <div className="app">
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: 'var(--bg-elevated)',
+            color: 'var(--text-primary)',
+            border: '1px solid var(--border)',
+          },
+        }}
+      />
 
-      {/* --- Main Content Area --- */}
-      <main
-        className={`flex-1 ${!isLoggedIn ? "flex items-center justify-center" : ""
-          }`}
-      >
-        {/* --- App Routes --- */}
+      <main className={!isLoggedIn ? "flex items-center justify-center min-h-screen" : "flex-1"}>
         <Routes>
-          {/* Home Page (protected) */}
           <Route
             path="/"
-            element={
-              isLoggedIn ? <HomePage /> : <Navigate to="/login" replace />
-            }
+            element={isLoggedIn ? <HomePage /> : <Navigate to="/login" replace />}
           />
-          {/* Login Page (redirect if logged in) */}
           <Route
             path="/login"
-            element={
-              !isLoggedIn ? (
-                <LoginPage onLogin={login} />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
+            element={!isLoggedIn ? <LoginPage /> : <Navigate to="/" replace />}
           />
-          {/* Register Page (redirect if logged in) */}
           <Route
             path="/register"
-            element={
-              !isLoggedIn ? <RegisterPage /> : <Navigate to="/" replace />
-            }
+            element={!isLoggedIn ? <RegisterPage /> : <Navigate to="/" replace />}
           />
-          {/* Catch-all: Redirect based on auth status */}
           <Route
             path="*"
             element={<Navigate to={isLoggedIn ? "/" : "/login"} replace />}
