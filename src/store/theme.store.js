@@ -1,14 +1,25 @@
-  // File: src/store/theme.store.js
+// File: src/store/theme.store.js
 
   import { create } from "zustand";
 
   // Helper functions
-  const getStoredTheme = () => localStorage.getItem("theme") || "nord";
+const getStoredTheme = () => {
+  const stored = localStorage.getItem("theme");
+  if (stored && (stored === "light" || stored === "dark")) {
+    return stored;
+  }
+  // Default to system preference
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+};
 
-  const applyTheme = (theme) => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  };
+const applyTheme = (theme) => {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+  localStorage.setItem("theme", theme);
+};
 
   // Zustand store
   const useThemeStore = create((set) => ({
