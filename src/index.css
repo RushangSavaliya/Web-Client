@@ -211,8 +211,21 @@
 .hover\:text-primary:hover { @apply text-blue-600; }
 
 /* Dropdown styles */
+.dropdown {
+  @apply relative inline-block;
+}
+
+.dropdown-end {
+  @apply text-right;
+}
+
 .dropdown-content {
   @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 shadow-lg;
+}
+
+/* List utilities */
+.list-col-grow {
+  @apply flex-1 min-w-0;
 }
 
 /* Responsive utilities for dark mode */
