@@ -11,7 +11,7 @@ function Navbar({ user, onToggleSidebar }) {
       <button
         onClick={onToggleSidebar}
         className="btn btn-ghost md:hidden"
-        aria-label="Open menu"
+        aria-label="Menu"
       >
         <FaBars size={16} />
       </button>
@@ -25,20 +25,11 @@ function Navbar({ user, onToggleSidebar }) {
 
       {user && (
         <div className="navbar-actions">
-          <div className="hidden sm:flex items-center gap-3">
-            <span className="text-sm font-medium">{user.username}</span>
-            <div className="flex items-center gap-1 text-xs">
-              <div className="status-indicator" />
-              Online
-            </div>
-          </div>
-          
+          <span className="hidden sm:inline text-sm">{user.username}</span>
           <Avatar username={user.username} size="sm" />
-          
           <button
             onClick={logout}
             className="btn btn-ghost"
-            title="Logout"
             aria-label="Logout"
           >
             <FiLogOut size={16} />

@@ -15,7 +15,6 @@ function ChatArea({ selectedUser, onBack }) {
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Fetch messages
   useEffect(() => {
     if (!selectedUser) return;
 
@@ -34,7 +33,6 @@ function ChatArea({ selectedUser, onBack }) {
     fetchMessages();
   }, [selectedUser]);
 
-  // Listen for new messages
   useEffect(() => {
     const handleNewMessage = (msg) => {
       if (
@@ -49,7 +47,6 @@ function ChatArea({ selectedUser, onBack }) {
     return () => socket.off("newMessage", handleNewMessage);
   }, [selectedUser]);
 
-  // Auto scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -58,7 +55,6 @@ function ChatArea({ selectedUser, onBack }) {
     setMessages((prev) => [...prev, newMessage]);
   };
 
-  // Empty state
   if (!selectedUser) {
     return (
       <div className="chat-area">
@@ -67,9 +63,6 @@ function ChatArea({ selectedUser, onBack }) {
             <BsChatDots />
           </div>
           <h2 className="empty-state-title">Select a chat</h2>
-          <p className="empty-state-description">
-            Choose a contact to start messaging
-          </p>
         </div>
       </div>
     );
@@ -90,7 +83,6 @@ function ChatArea({ selectedUser, onBack }) {
         
         <div className="flex-1 min-w-0">
           <div className="font-medium">{selectedUser.username}</div>
-          <div className="text-xs opacity-75">online</div>
         </div>
       </header>
 

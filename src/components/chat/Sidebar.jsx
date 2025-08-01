@@ -10,7 +10,6 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
   const { user: currentUser } = authStore();
   const { allUsers, setAllUsers, onlineUsers, setOnlineUsers } = useUserStore();
 
-  // Fetch users
   useEffect(() => {
     axiosInstance
       .get("/users")
@@ -18,7 +17,6 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
       .catch(console.error);
   }, [setAllUsers]);
 
-  // Socket events
   useEffect(() => {
     const handleActiveUsers = (users) => setOnlineUsers(users || []);
     const handleUserOnline = (user) => {
@@ -103,11 +101,11 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                 
                 <div className="contact-info">
                   <div className="contact-name">
-                    {user.username}{self && " (You)"}
+                    {user.username}
                   </div>
                   <div className="contact-status">
                     <div className={`status-indicator ${online ? "" : "offline"}`} />
-                    {online ? "online" : "last seen recently"}
+                    {online ? "online" : "offline"}
                   </div>
                 </div>
               </button>

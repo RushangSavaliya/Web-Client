@@ -13,7 +13,6 @@ const App = () => {
     if (token) {
       login(token);
     }
-    // Initialize socket connection if user is already logged in
     initializeSocket();
   }, [token, login, initializeSocket]);
 
@@ -22,35 +21,27 @@ const App = () => {
       <Toaster 
         position="top-center"
         toastOptions={{
-          duration: 4000,
+          duration: 3000,
           style: {
-            background: 'var(--bg-elevated)',
+            background: 'var(--bg-tertiary)',
             color: 'var(--text-primary)',
             border: '1px solid var(--border)',
+            fontSize: '14px',
           },
         }}
       />
 
-      <main className={!isLoggedIn ? "flex items-center justify-center min-h-screen" : "flex-1"}>
-        <Routes>
-          <Route
-            path="/"
-            element={isLoggedIn ? <HomePage /> : <Navigate to="/login" replace />}
-          />
-          <Route
-            path="/login"
-            element={!isLoggedIn ? <LoginPage onLogin={login} /> : <Navigate to="/" replace />}
-          />
-          <Route
-            path="/register"
-            element={!isLoggedIn ? <RegisterPage /> : <Navigate to="/" replace />}
-          />
-          <Route
-            path="*"
-            element={<Navigate to={isLoggedIn ? "/" : "/login"} replace />}
-          />
-        </Routes>
-      </main>
+      {isLoggedIn ? (
+        <HomePage />
+      ) : (
+        <div className="min-h-screen flex items-center justify-center">
+          <Routes>
+            <Route path="/login" element={<LoginPage onLogin={login} />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </div>
+      )}
     </div>
   );
 };

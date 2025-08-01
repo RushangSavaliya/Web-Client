@@ -23,10 +23,7 @@ function MessageList({ messages, isLoading, currentUserId, chatEndRef }) {
           <div className="empty-state-icon">
             <BsChatDots />
           </div>
-          <h3 className="empty-state-title">No messages yet</h3>
-          <p className="empty-state-description">
-            Send a message to start the conversation
-          </p>
+          <h3 className="empty-state-title">No messages</h3>
         </div>
       </div>
     );
