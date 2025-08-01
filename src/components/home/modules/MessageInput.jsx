@@ -63,12 +63,12 @@ function MessageInput({ receiverId, onSent }) {
   // Classes
   const buttonSize = "h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12";
   const inputClass = [
-    "w-full rounded-lg border px-3 py-2 text-sm sm:text-base placeholder:text-gray-500 focus:outline-none focus:ring-1 transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400 h-10 sm:h-11 md:h-12",
-    hasError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500",
+    "input h-10 sm:h-11 md:h-12 text-sm sm:text-base",
+    hasError ? "input-error" : "",
   ].join(" ");
 
   return (
-    <div className="border-t border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4 sm:p-6">
+    <div className="message-input-container p-4 sm:p-6">
       <div className="flex items-end gap-2 sm:gap-3">
         <div className="flex-1 min-w-0">
           <input
@@ -92,12 +92,12 @@ function MessageInput({ receiverId, onSent }) {
           type="button"
           onClick={handleSend}
           disabled={!content.trim() || isSending}
-          className={`bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none transition-colors aspect-square min-h-0 flex items-center justify-center ${buttonSize}`}
+          className={`btn btn-primary btn-circle min-h-0 flex items-center justify-center ${buttonSize}`}
           aria-label="Send Message"
           aria-disabled={isSending}
         >
           {isSending ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <div className="loading-spinner w-4 h-4" />
           ) : (
             <FiSend className="w-4 h-4 sm:w-5 sm:h-5" />
           )}
