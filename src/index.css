@@ -1,75 +1,72 @@
 @import "tailwindcss";
 
-/* Custom CSS Variables for Theme System */
+/* Telegram-inspired Dark Theme */
 :root {
-  /* Light theme colors */
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-primary-content: #ffffff;
-  --color-secondary: #64748b;
-  --color-accent: #10b981;
-  --color-neutral: #374151;
-  --color-neutral-content: #ffffff;
-  --color-base-100: #ffffff;
-  --color-base-200: #f8fafc;
-  --color-base-300: #e2e8f0;
-  --color-base-content: #1f2937;
-  --color-error: #ef4444;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-info: #3b82f6;
+  /* Primary colors - Telegram blue */
+  --color-primary: #3390ec;
+  --color-primary-hover: #2b7cd6;
+  --color-primary-light: #64a9dd;
+  
+  /* Background colors */
+  --color-bg-primary: #212121;
+  --color-bg-secondary: #1e1e1e;
+  --color-bg-tertiary: #2f2f2f;
+  --color-bg-elevated: #383838;
+  
+  /* Text colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #aaaaaa;
+  --color-text-muted: #777777;
+  
+  /* Border colors */
+  --color-border: #3a3a3a;
+  --color-border-light: #4a4a4a;
+  
+  /* Status colors */
+  --color-success: #4dcd5e;
+  --color-error: #e53e3e;
+  --color-warning: #ff8c00;
+  
+  /* Message bubble colors */
+  --color-message-out: #3390ec;
+  --color-message-in: #383838;
 }
 
-/* Dark theme colors */
-.dark {
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
-  --color-primary-content: #ffffff;
-  --color-secondary: #64748b;
-  --color-accent: #10b981;
-  --color-neutral: #374151;
-  --color-neutral-content: #ffffff;
-  --color-base-100: #1f2937;
-  --color-base-200: #111827;
-  --color-base-300: #374151;
-  --color-base-content: #f9fafb;
-  --color-error: #ef4444;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-info: #3b82f6;
+/* Apply theme to body */
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
 }
 
 /* Custom component styles */
 .btn {
-  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-telegram-bg disabled:opacity-50 disabled:pointer-events-none;
 }
 
 .btn-primary {
-  @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+  background-color: var(--color-primary);
+  color: white;
 }
 
-.btn-secondary {
-  @apply bg-slate-600 text-white hover:bg-slate-700 focus:ring-slate-500;
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.btn-primary:focus {
+  @apply ring-2 ring-blue-500;
 }
 
 .btn-ghost {
-  @apply bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900;
+  @apply bg-transparent text-telegram-text-secondary;
 }
 
-.btn-outline {
-  @apply border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50;
+.btn-ghost:hover {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-primary);
 }
 
 .btn-sm {
   @apply px-3 py-1.5 text-xs;
-}
-
-.btn-md {
-  @apply px-4 py-2 text-sm;
-}
-
-.btn-lg {
-  @apply px-6 py-3 text-base;
 }
 
 .btn-circle {
@@ -77,79 +74,71 @@
 }
 
 .input {
-  @apply w-full rounded-lg border border-gray-300 px-3 py-2 text-sm placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50;
+  @apply w-full rounded-lg px-3 py-2 text-sm transition-all duration-200 focus:outline-none focus:ring-2 disabled:opacity-50;
+  background-color: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
 }
 
-.input-bordered {
-  @apply border-gray-300;
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(51, 144, 236, 0.2);
 }
 
 .input-error {
-  @apply border-red-500 focus:border-red-500 focus:ring-red-500;
+  border-color: var(--color-error);
 }
 
-.input-sm {
-  @apply px-2 py-1 text-xs;
-}
-
-.input-md {
-  @apply px-3 py-2 text-sm;
-}
-
-.input-lg {
-  @apply px-4 py-3 text-base;
+.input-error:focus {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.2);
 }
 
 .link {
-  @apply text-blue-600 hover:text-blue-800 hover:underline;
+  color: var(--color-primary);
+  text-decoration: none;
 }
 
-.loading {
-  @apply animate-spin;
+.link:hover {
+  color: var(--color-primary-light);
+  text-decoration: underline;
 }
 
+/* Loading animations */
 .loading-spinner {
-  @apply border-2 border-current border-t-transparent rounded-full;
-}
-
-.loading-sm {
-  @apply w-4 h-4;
-}
-
-.loading-md {
-  @apply w-6 h-6;
-}
-
-.loading-lg {
-  @apply w-8 h-8;
+  @apply border-2 border-current border-t-transparent rounded-full animate-spin;
 }
 
 .loading-dots {
-  @apply relative;
+  @apply flex space-x-1;
 }
 
-.loading-dots::before,
-.loading-dots::after {
-  @apply content-[''] absolute animate-pulse w-2 h-2 bg-current rounded-full;
+.loading-dots > div {
+  @apply w-2 h-2 rounded-full animate-pulse;
+  background-color: var(--color-primary);
 }
 
-.loading-dots::before {
-  @apply left-0;
-  animation-delay: 0s;
+.loading-dots > div:nth-child(2) {
+  animation-delay: 0.1s;
 }
 
-.loading-dots::after {
-  @apply right-0;
-  animation-delay: 0.5s;
+.loading-dots > div:nth-child(3) {
+  animation-delay: 0.2s;
 }
 
-/* Chat bubble styles */
-.chat-bubble-primary {
-  @apply bg-blue-600 text-white;
+/* Message bubble styles */
+.message-bubble-out {
+  background-color: var(--color-message-out);
+  color: white;
 }
 
-.chat-bubble-neutral {
-  @apply bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-gray-100;
+.message-bubble-in {
+  background-color: var(--color-message-in);
+  color: var(--color-text-primary);
 }
 
 /* Floating label styles */
@@ -159,107 +148,118 @@
 
 .floating-label input:focus + span,
 .floating-label input:not(:placeholder-shown) + span {
-  @apply -translate-y-6 -translate-x-1 scale-75 text-blue-600 px-1 bg-white dark:bg-gray-800;
+  transform: translateY(-1.5rem) translateX(-0.25rem) scale(0.75);
+  color: var(--color-primary);
+  background-color: var(--color-bg-primary);
+  padding: 0 0.25rem;
 }
 
 .floating-label span {
-  @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 transition-all duration-200 pointer-events-none origin-left;
+  @apply absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none origin-left;
+  color: var(--color-text-muted);
 }
 
 .validator-hint {
-  @apply text-xs text-red-500 mt-1;
+  @apply text-xs mt-1;
+  color: var(--color-error);
 }
 
-/* List row for chat sidebar */
-.list-row {
-  @apply flex items-center gap-3 p-3 rounded-lg;
+/* Telegram theme utilities */
+.bg-telegram-primary { background-color: var(--color-bg-primary); }
+.bg-telegram-secondary { background-color: var(--color-bg-secondary); }
+.bg-telegram-tertiary { background-color: var(--color-bg-tertiary); }
+.bg-telegram-elevated { background-color: var(--color-bg-elevated); }
+
+.text-telegram-primary { color: var(--color-text-primary); }
+.text-telegram-secondary { color: var(--color-text-secondary); }
+.text-telegram-muted { color: var(--color-text-muted); }
+
+.border-telegram { border-color: var(--color-border); }
+.border-telegram-light { border-color: var(--color-border-light); }
+
+.text-telegram-success { color: var(--color-success); }
+.text-telegram-error { color: var(--color-error); }
+
+/* Navigation styles */
+.navbar {
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
 }
 
-/* Theme utilities */
-.bg-base-100 { 
-  @apply bg-white dark:bg-gray-800; 
+/* Chat sidebar styles */
+.chat-sidebar {
+  background-color: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border);
 }
 
-.bg-base-200 { 
-  @apply bg-gray-50 dark:bg-gray-900; 
+.chat-sidebar-item {
+  @apply flex items-center gap-3 p-3 rounded-lg transition-all duration-200 cursor-pointer;
 }
 
-.bg-base-300 { 
-  @apply bg-gray-200 dark:bg-gray-700; 
+.chat-sidebar-item:hover {
+  background-color: var(--color-bg-elevated);
 }
 
-.bg-base-50 { 
-  @apply bg-gray-50 dark:bg-gray-900; 
+.chat-sidebar-item.active {
+  background-color: var(--color-primary);
+  color: white;
 }
 
-.text-base-content { 
-  @apply text-gray-900 dark:text-gray-100; 
+/* Chat area styles */
+.chat-area {
+  background-color: var(--color-bg-primary);
 }
 
-.border-base-300 { 
-  @apply border-gray-200 dark:border-gray-600; 
+.chat-header {
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.bg-primary { 
-  @apply bg-blue-600; 
+.message-input-container {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
 }
 
-.text-primary { 
-  @apply text-blue-600; 
+/* Avatar styles */
+.avatar {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-primary);
 }
 
-.text-primary-content { 
-  @apply text-white; 
+/* Scrollbar styles for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.bg-primary-content { 
-  @apply bg-white; 
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
 }
 
-.border-primary { 
-  @apply border-blue-600; 
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-light);
+  border-radius: 3px;
 }
 
-.text-neutral-content { 
-  @apply text-white; 
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
 }
 
-.bg-neutral { 
-  @apply bg-gray-600; 
+/* Form styles */
+.form-container {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
 }
 
-.text-error { 
-  @apply text-red-500; 
+/* Footer styles */
+.footer {
+  color: var(--color-text-secondary);
 }
 
-.text-success { 
-  @apply text-green-500; 
+.footer a {
+  color: var(--color-text-secondary);
+  transition: color 0.2s;
 }
 
-/* Dropdown styles */
-.dropdown {
-  @apply relative inline-block;
-}
-
-.dropdown-end {
-  @apply text-right;
-}
-
-.dropdown-content {
-  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 shadow-lg;
-}
-
-/* List utilities */
-.list-col-grow {
-  @apply flex-1 min-w-0;
-}
-
-/* Responsive utilities for dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-base-100: #1f2937;
-    --color-base-200: #111827;
-    --color-base-300: #374151;
-    --color-base-content: #f9fafb;
-  }
+.footer a:hover {
+  color: var(--color-primary);
 }
