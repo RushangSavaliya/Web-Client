@@ -64,15 +64,15 @@ function ChatArea({ selectedUser, onBack }) {
     // ====== Render: No User Selected ======
     if (!selectedUser) {
         return (
-            <div className="flex-1 flex items-center justify-center px-4 bg-base-100">
+            <div className="flex-1 flex items-center justify-center px-4 bg-white dark:bg-gray-800">
                 <div className="text-center max-w-sm">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-base-300 flex items-center justify-center text-2xl text-primary">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-2xl text-blue-600">
                         <BsChatDots className="w-6 h-6" />
                     </div>
-                    <h2 className="text-lg font-semibold text-base-content mb-1">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
                         Start a conversation
                     </h2>
-                    <p className="text-sm text-base-content/60">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                         Select a user from the sidebar to begin chatting.
                     </p>
                 </div>
@@ -101,4 +101,3 @@ function ChatArea({ selectedUser, onBack }) {
 }
 
 export default ChatArea;
-
