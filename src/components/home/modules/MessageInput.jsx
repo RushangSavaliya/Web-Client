@@ -1,4 +1,4 @@
-// File: src/components/MessageInput.jsx
+// File: src/components/home/modules/MessageInput.jsx
 
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
