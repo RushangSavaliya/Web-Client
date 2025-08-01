@@ -159,11 +159,11 @@
 
 .floating-label input:focus + span,
 .floating-label input:not(:placeholder-shown) + span {
-  @apply -translate-y-4 scale-75 text-blue-600;
+  @apply -translate-y-6 -translate-x-1 scale-75 text-blue-600 px-1 bg-white dark:bg-gray-800;
 }
 
 .floating-label span {
-  @apply absolute left-3 top-2 text-gray-500 transition-all duration-200 pointer-events-none;
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 transition-all duration-200 pointer-events-none origin-left;
 }
 
 .validator-hint {
@@ -179,7 +179,7 @@
 .bg-base-100 { @apply bg-white dark:bg-gray-800; }
 .bg-base-200 { @apply bg-gray-50 dark:bg-gray-900; }
 .bg-base-300 { @apply bg-gray-200 dark:bg-gray-700; }
-.bg-base-50 { @apply bg-gray-25 dark:bg-gray-850; }
+.bg-base-50 { @apply bg-gray-50 dark:bg-gray-850; }
 
 .text-base-content { @apply text-gray-900 dark:text-gray-100; }
 .text-base-content\/60 { @apply text-gray-500 dark:text-gray-400; }
