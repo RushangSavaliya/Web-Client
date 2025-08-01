@@ -1,7 +1,5 @@
-import { FaComments, FaBars } from "react-icons/fa";
-import Button from "../ui/Button";
+import { FaComments, FaBars, FiLogOut } from "react-icons/fa";
 import Avatar from "../ui/Avatar";
-import LogoutButton from "./LogoutButton";
 import authStore from "../../store/auth.store";
 
 function Navbar({ user, onToggleSidebar }) {
@@ -9,30 +7,26 @@ function Navbar({ user, onToggleSidebar }) {
 
   return (
     <nav className="navbar">
-      <Button
-        variant="ghost"
-        size="sm"
+      <button
         onClick={onToggleSidebar}
-        className="md:hidden mr-2"
-        aria-label="Open contacts"
+        className="btn btn-ghost md:hidden"
+        aria-label="Open menu"
       >
-        <FaBars size={18} />
-      </Button>
+        <FaBars size={16} />
+      </button>
 
       <div className="navbar-brand">
         <div className="navbar-brand-icon">
-          <FaComments size={16} />
+          <FaComments size={14} />
         </div>
         <span className="hidden sm:inline">ChatApp</span>
       </div>
 
       {user && (
         <div className="navbar-actions">
-          <div className="hidden sm:block text-right mr-3">
-            <div className="text-sm font-semibold truncate max-w-[120px]">
-              {user.username}
-            </div>
-            <div className="text-xs opacity-75 flex items-center gap-1">
+          <div className="hidden sm:flex items-center gap-3">
+            <span className="text-sm font-medium">{user.username}</span>
+            <div className="flex items-center gap-1 text-xs">
               <div className="status-indicator" />
               Online
             </div>
@@ -40,7 +34,14 @@ function Navbar({ user, onToggleSidebar }) {
           
           <Avatar username={user.username} size="sm" />
           
-          <LogoutButton onLogout={logout} />
+          <button
+            onClick={logout}
+            className="btn btn-ghost"
+            title="Logout"
+            aria-label="Logout"
+          >
+            <FiLogOut size={16} />
+          </button>
         </div>
       )}
     </nav>

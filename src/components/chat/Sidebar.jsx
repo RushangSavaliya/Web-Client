@@ -1,6 +1,5 @@
 import { useEffect, useCallback } from "react";
-import { FiCircle, FiMessageCircle, FiUsers, FiX } from "react-icons/fi";
-import Button from "../ui/Button";
+import { FiUsers, FiX } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
 import authStore from "../../store/auth.store";
 import socket from "../../lib/socket";
@@ -11,53 +10,32 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
   const { user: currentUser } = authStore();
   const { allUsers, setAllUsers, onlineUsers, setOnlineUsers } = useUserStore();
 
-  // Fetch all users
+  // Fetch users
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await axiosInstance.get("/users");
-        console.log("Fetched users:", res.data.users);
-        setAllUsers(res.data.users);
-      } catch (error) {
-        console.error("Failed to fetch users:", error);
-      }
-    };
-
-    fetchUsers();
+    axiosInstance
+      .get("/users")
+      .then((res) => setAllUsers(res.data.users))
+      .catch(console.error);
   }, [setAllUsers]);
 
-  // Listen to socket events for online users
+  // Socket events
   useEffect(() => {
-    const handleActiveUsers = (users) => {
-      console.log("Active users received:", users);
-      setOnlineUsers(users || []);
-    };
-
+    const handleActiveUsers = (users) => setOnlineUsers(users || []);
     const handleUserOnline = (user) => {
-      console.log("User came online:", user);
       setOnlineUsers(prev => {
         const exists = prev.find(u => u._id === user._id);
-        if (!exists) {
-          return [...prev, user];
-        }
-        return prev;
+        return exists ? prev : [...prev, user];
       });
     };
-
     const handleUserOffline = (userId) => {
-      console.log("User went offline:", userId);
       setOnlineUsers(prev => prev.filter(u => u._id !== userId));
     };
 
-    // Socket event listeners
     socket.on("active-users", handleActiveUsers);
     socket.on("userOnline", handleUserOnline);
     socket.on("userOffline", handleUserOffline);
-
-    // Request current active users on mount
     socket.emit("getActiveUsers");
 
-    // Cleanup
     return () => {
       socket.off("active-users", handleActiveUsers);
       socket.off("userOnline", handleUserOnline);
@@ -65,17 +43,8 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
     };
   }, [setOnlineUsers]);
 
-  // Debug: Log online users changes
-  useEffect(() => {
-    console.log("Online users updated:", onlineUsers);
-  }, [onlineUsers]);
-
   const isOnline = useCallback(
-    (id) => {
-      const online = onlineUsers.some((u) => u._id === id);
-      console.log(`User ${id} is ${online ? 'online' : 'offline'}`);
-      return online;
-    },
+    (id) => onlineUsers.some((u) => u._id === id),
     [onlineUsers]
   );
 
@@ -84,16 +53,11 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
     [currentUser]
   );
 
-  // Get sorted user list
   const getSortedUsers = () => {
     const merged = [...allUsers];
-
-    // Add self if not included
     if (currentUser && !merged.some((u) => u._id === currentUser._id)) {
       merged.unshift(currentUser);
     }
-
-    // Sort: self → online → offline
     return merged.sort((a, b) => {
       if (a._id === currentUser?._id) return -1;
       if (b._id === currentUser?._id) return 1;
@@ -103,42 +67,23 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
     });
   };
 
-  const handleUserSelect = (user) => {
-    onSelectUser(user);
-  };
-
-  const handleKeyDown = (e, user) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      handleUserSelect(user);
-    }
-  };
-
   return (
-    <aside
-      className={`sidebar ${isOpen ? "open" : ""}`}
-      aria-label="Contacts sidebar"
-    >
+    <aside className={`sidebar ${isOpen ? "open" : ""}`}>
       <div className="sidebar-header">
         <div className="sidebar-title">
           <div className="navbar-brand-icon">
-            <FiUsers size={16} />
+            <FiUsers size={14} />
           </div>
-          <span>Contacts</span>
-          <span className="text-xs opacity-50 ml-2">
-            ({onlineUsers.length} online)
-          </span>
+          <span>Chats</span>
         </div>
         
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
           onClick={onClose}
-          className="md:hidden"
-          aria-label="Close contacts"
+          className="btn btn-ghost md:hidden"
+          aria-label="Close"
         >
-          <FiX size={18} />
-        </Button>
+          <FiX size={16} />
+        </button>
       </div>
 
       <div className="sidebar-content">
@@ -149,51 +94,26 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
             const active = selectedUserId === user._id;
 
             return (
-              <div
+              <button
                 key={user._id}
                 className={`contact-item ${active ? "active" : ""}`}
-                onClick={() => handleUserSelect(user)}
-                onKeyDown={(e) => handleKeyDown(e, user)}
-                tabIndex={0}
-                role="button"
-                aria-pressed={active}
+                onClick={() => onSelectUser(user)}
               >
-                <div className="relative">
-                  <Avatar 
-                    username={user.username} 
-                    className={active ? "!bg-white !text-primary" : ""} 
-                  />
-                  {self && (
-                    <div 
-                      className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center shadow"
-                      style={{ backgroundColor: 'var(--primary)' }}
-                    >
-                      <FiMessageCircle className="w-2.5 h-2.5 text-white" />
-                    </div>
-                  )}
-                </div>
-
+                <Avatar username={user.username} />
+                
                 <div className="contact-info">
                   <div className="contact-name">
-                    {user.username} {self && "(You)"}
+                    {user.username}{self && " (You)"}
                   </div>
                   <div className="contact-status">
-                    <FiCircle 
-                      className={`status-indicator ${online ? "" : "offline"}`} 
-                    />
-                    {online ? "Online" : "Offline"}
+                    <div className={`status-indicator ${online ? "" : "offline"}`} />
+                    {online ? "online" : "last seen recently"}
                   </div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
-      </div>
-
-      <div className="sidebar-footer md:hidden">
-        <p className="text-xs text-center opacity-75">
-          Tap a contact to start chatting
-        </p>
       </div>
     </aside>
   );

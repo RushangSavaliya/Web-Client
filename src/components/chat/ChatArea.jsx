@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { BsChatDots } from "react-icons/bs";
 import { FiArrowLeft } from "react-icons/fi";
-import Button from "../ui/Button";
 import Avatar from "../ui/Avatar";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
@@ -16,7 +15,7 @@ function ChatArea({ selectedUser, onBack }) {
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Fetch messages when user changes
+  // Fetch messages
   useEffect(() => {
     if (!selectedUser) return;
 
@@ -50,7 +49,7 @@ function ChatArea({ selectedUser, onBack }) {
     return () => socket.off("newMessage", handleNewMessage);
   }, [selectedUser]);
 
-  // Auto scroll to bottom
+  // Auto scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -59,7 +58,7 @@ function ChatArea({ selectedUser, onBack }) {
     setMessages((prev) => [...prev, newMessage]);
   };
 
-  // Empty state when no user is selected
+  // Empty state
   if (!selectedUser) {
     return (
       <div className="chat-area">
@@ -67,9 +66,9 @@ function ChatArea({ selectedUser, onBack }) {
           <div className="empty-state-icon">
             <BsChatDots />
           </div>
-          <h2 className="empty-state-title">Start a conversation</h2>
+          <h2 className="empty-state-title">Select a chat</h2>
           <p className="empty-state-description">
-            Select a contact from the sidebar to begin chatting
+            Choose a contact to start messaging
           </p>
         </div>
       </div>
@@ -78,32 +77,23 @@ function ChatArea({ selectedUser, onBack }) {
 
   return (
     <div className="chat-area">
-      {/* Chat Header */}
       <header className="chat-header">
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
           onClick={onBack}
-          className="md:hidden mr-3"
-          aria-label="Go back to contacts"
+          className="btn btn-ghost md:hidden"
+          aria-label="Back"
         >
-          <FiArrowLeft size={18} />
-        </Button>
+          <FiArrowLeft size={16} />
+        </button>
 
         <Avatar username={selectedUser.username} />
         
         <div className="flex-1 min-w-0">
-          <h2 className="font-semibold text-sm truncate">
-            {selectedUser.username}
-          </h2>
-          <p className="text-xs opacity-75 flex items-center gap-1">
-            <div className="status-indicator" />
-            Online
-          </p>
+          <div className="font-medium">{selectedUser.username}</div>
+          <div className="text-xs opacity-75">online</div>
         </div>
       </header>
 
-      {/* Messages */}
       <MessageList
         messages={messages}
         isLoading={isLoading}
@@ -111,7 +101,6 @@ function ChatArea({ selectedUser, onBack }) {
         chatEndRef={chatEndRef}
       />
 
-      {/* Message Input */}
       <MessageInput
         receiverId={selectedUser._id}
         onSent={handleSendMessage}
