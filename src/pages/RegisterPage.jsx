@@ -86,13 +86,13 @@ function RegisterPage() {
   // UI Rendering
   // -------------------------------
   return (
-    <div className="min-h-screen bg-base-200 flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       {/* --------- Main Content --------- */}
       <main className="flex-grow flex justify-center items-center px-4 py-8">
         <section className="w-full max-w-lg md:max-w-xl mx-auto">
           {/* Header */}
           <div className="text-center mb-3">
-            <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-2 rounded-xl bg-primary text-primary-content flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-2 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
               <FaComments className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <h1 className="text-xl md:text-2xl font-medium leading-tight">Create account</h1>
@@ -102,7 +102,7 @@ function RegisterPage() {
           <form
             onSubmit={handleSubmit}
             autoComplete="on"
-            className="bg-base-100 border border-base-300 rounded-xl px-6 md:px-8 py-6 md:py-8 shadow-sm space-y-5 md:space-y-6"
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl px-6 md:px-8 py-6 md:py-8 shadow-sm space-y-5 md:space-y-6"
           >
             {/* Username Field */}
             <label className="floating-label validator w-full">
@@ -110,14 +110,14 @@ function RegisterPage() {
                 ref={usernameRef}
                 type="text"
                 name="username"
-                className={`input input-bordered input-md w-full ${errors.username ? "input-error" : ""}`}
+                className={`w-full rounded-lg border px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-1 transition-colors ${errors.username ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"} dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400`}
                 placeholder="Username"
                 value={form.username}
                 onChange={handleChange}
                 autoComplete="username"
               />
               <span>Username</span>
-              {errors.username && <p className="validator-hint text-error">{errors.username}</p>}
+              {errors.username && <p className="text-xs text-red-500 mt-1">{errors.username}</p>}
             </label>
 
             {/* Email Field */}
@@ -125,14 +125,14 @@ function RegisterPage() {
               <input
                 type="email"
                 name="email"
-                className={`input input-bordered input-md w-full ${errors.email ? "input-error" : ""}`}
+                className={`w-full rounded-lg border px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-1 transition-colors ${errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"} dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400`}
                 placeholder="Email"
                 value={form.email}
                 onChange={handleChange}
                 autoComplete="email"
               />
               <span>Email</span>
-              {errors.email && <p className="validator-hint text-error">{errors.email}</p>}
+              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
             </label>
 
             {/* Password Field */}
@@ -140,7 +140,7 @@ function RegisterPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                className={`input input-bordered input-md w-full pr-10 ${errors.password ? "input-error" : ""}`}
+                className={`w-full rounded-lg border px-3 py-2 pr-10 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-1 transition-colors ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"} dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400`}
                 placeholder="Password"
                 value={form.password}
                 onChange={handleChange}
@@ -151,7 +151,7 @@ function RegisterPage() {
               {/* Toggle password visibility */}
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-base-content"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                 onClick={() => setShowPassword((v) => !v)}
                 tabIndex={-1}
                 aria-label="Toggle password visibility"
@@ -159,22 +159,22 @@ function RegisterPage() {
                 {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
               </button>
 
-              {errors.password && <p className="validator-hint text-error">{errors.password}</p>}
+              {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
             </label>
 
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-md btn-primary w-full"
+              className="w-full bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none transition-colors"
               disabled={loading || !form.username || !form.email || !form.password}
             >
-              {loading ? <span className="loading loading-spinner loading-sm" /> : "Register"}
+              {loading ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : "Register"}
             </button>
 
             {/* Login Redirect */}
             <p className="text-center text-sm">
               Have an account?{" "}
-              <Link to="/login" className="link text-primary font-medium">Login</Link>
+              <Link to="/login" className="text-blue-600 hover:text-blue-800 hover:underline font-medium">Login</Link>
             </p>
           </form>
         </section>
