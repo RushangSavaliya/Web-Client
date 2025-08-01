@@ -1,15 +1,226 @@
-/* File: index.css */
-
 @import "tailwindcss";
 
-@plugin "daisyui" {
-  themes: all;
+/* Custom CSS Variables for Theme System */
+:root {
+  /* Light theme colors */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-primary-content: #ffffff;
+  --color-secondary: #64748b;
+  --color-accent: #10b981;
+  --color-neutral: #374151;
+  --color-neutral-content: #ffffff;
+  --color-base-100: #ffffff;
+  --color-base-200: #f8fafc;
+  --color-base-300: #e2e8f0;
+  --color-base-content: #1f2937;
+  --color-error: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
 }
 
-/*  Catppuccin themes  */
+/* Dark theme colors */
+[data-theme="dark"] {
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-content: #ffffff;
+  --color-secondary: #64748b;
+  --color-accent: #10b981;
+  --color-neutral: #374151;
+  --color-neutral-content: #ffffff;
+  --color-base-100: #1f2937;
+  --color-base-200: #111827;
+  --color-base-300: #374151;
+  --color-base-content: #f9fafb;
+  --color-error: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+}
 
+/* Custom component styles */
+.btn {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+}
 
-@plugin "./themes/latte.js";
-@plugin "./themes/frappe.js";
-@plugin "./themes/macchiato.js";
-@plugin "./themes/mocha.js";
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+}
+
+.btn-secondary {
+  @apply bg-slate-600 text-white hover:bg-slate-700 focus:ring-slate-500;
+}
+
+.btn-ghost {
+  @apply bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900;
+}
+
+.btn-outline {
+  @apply border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-xs;
+}
+
+.btn-md {
+  @apply px-4 py-2 text-sm;
+}
+
+.btn-lg {
+  @apply px-6 py-3 text-base;
+}
+
+.btn-circle {
+  @apply rounded-full p-2 aspect-square;
+}
+
+.input {
+  @apply w-full rounded-lg border border-gray-300 px-3 py-2 text-sm placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50;
+}
+
+.input-bordered {
+  @apply border-gray-300;
+}
+
+.input-error {
+  @apply border-red-500 focus:border-red-500 focus:ring-red-500;
+}
+
+.input-sm {
+  @apply px-2 py-1 text-xs;
+}
+
+.input-md {
+  @apply px-3 py-2 text-sm;
+}
+
+.input-lg {
+  @apply px-4 py-3 text-base;
+}
+
+.link {
+  @apply text-blue-600 hover:text-blue-800 hover:underline;
+}
+
+.loading {
+  @apply animate-spin;
+}
+
+.loading-spinner {
+  @apply border-2 border-current border-t-transparent rounded-full;
+}
+
+.loading-sm {
+  @apply w-4 h-4;
+}
+
+.loading-md {
+  @apply w-6 h-6;
+}
+
+.loading-lg {
+  @apply w-8 h-8;
+}
+
+.loading-dots {
+  @apply relative;
+}
+
+.loading-dots::before,
+.loading-dots::after {
+  @apply content-[''] absolute animate-pulse w-2 h-2 bg-current rounded-full;
+}
+
+.loading-dots::before {
+  @apply left-0;
+  animation-delay: 0s;
+}
+
+.loading-dots::after {
+  @apply right-0;
+  animation-delay: 0.5s;
+}
+
+/* Chat bubble styles */
+.chat-bubble-primary {
+  @apply bg-blue-600 text-white;
+}
+
+.chat-bubble-neutral {
+  @apply bg-gray-200 text-gray-900;
+}
+
+/* Floating label styles */
+.floating-label {
+  @apply relative;
+}
+
+.floating-label input:focus + span,
+.floating-label input:not(:placeholder-shown) + span {
+  @apply -translate-y-4 scale-75 text-blue-600;
+}
+
+.floating-label span {
+  @apply absolute left-3 top-2 text-gray-500 transition-all duration-200 pointer-events-none;
+}
+
+.validator-hint {
+  @apply text-xs text-red-500 mt-1;
+}
+
+/* List row for chat sidebar */
+.list-row {
+  @apply flex items-center gap-3 p-3 rounded-lg;
+}
+
+/* Theme utilities */
+.bg-base-100 { @apply bg-white dark:bg-gray-800; }
+.bg-base-200 { @apply bg-gray-50 dark:bg-gray-900; }
+.bg-base-300 { @apply bg-gray-200 dark:bg-gray-700; }
+.bg-base-50 { @apply bg-gray-25 dark:bg-gray-850; }
+
+.text-base-content { @apply text-gray-900 dark:text-gray-100; }
+.text-base-content\/60 { @apply text-gray-500 dark:text-gray-400; }
+.text-base-content\/70 { @apply text-gray-400 dark:text-gray-300; }
+.text-base-content\/50 { @apply text-gray-500 dark:text-gray-500; }
+.text-base-content\/30 { @apply text-gray-600 dark:text-gray-600; }
+
+.border-base-300 { @apply border-gray-200 dark:border-gray-600; }
+
+.bg-primary { @apply bg-blue-600; }
+.text-primary { @apply text-blue-600; }
+.text-primary-content { @apply text-white; }
+.text-primary-content\/70 { @apply text-blue-100; }
+.text-primary-content\/50 { @apply text-blue-200; }
+.bg-primary-content { @apply bg-white; }
+.border-primary { @apply border-blue-600; }
+.border-primary\/30 { @apply border-blue-200; }
+.border-primary\/50 { @apply border-blue-300; }
+.bg-primary\/10 { @apply bg-blue-50; }
+.bg-primary\/20 { @apply bg-blue-100; }
+
+.text-neutral-content { @apply text-white; }
+.bg-neutral { @apply bg-gray-600; }
+
+.text-error { @apply text-red-500; }
+.text-success { @apply text-green-500; }
+
+.hover\:bg-primary:hover { @apply bg-blue-600; }
+.hover\:text-primary:hover { @apply text-blue-600; }
+
+/* Dropdown styles */
+.dropdown-content {
+  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 shadow-lg;
+}
+
+/* Responsive utilities for dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-base-100: #1f2937;
+    --color-base-200: #111827;
+    --color-base-300: #374151;
+    --color-base-content: #f9fafb;
+  }
+}
