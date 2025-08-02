@@ -19,8 +19,8 @@ function LoginPage({ onLogin }) {
 
     const validate = useCallback(() => {
         const errs = {};
-        if (!form.identifier.trim()) errs.identifier = "Required";
-        if (!form.password) errs.password = "Required";
+        if (!form.identifier.trim()) errs.identifier = "Username or email is required";
+        if (!form.password) errs.password = "Password is required";
         setErrors(errs);
         return Object.keys(errs).length === 0;
     }, [form]);
@@ -58,73 +58,84 @@ function LoginPage({ onLogin }) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="form-container">
-                <div className="form-header">
-                    <div className="form-icon">
-                        <FaComments />
-                    </div>
-                    <h1 className="form-title">Sign In</h1>
-                </div>
-
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <input
-                            ref={identifierRef}
-                            name="identifier"
-                            className={`input ${errors.identifier ? "input-error" : ""}`}
-                            placeholder=" "
-                            value={form.identifier}
-                            onChange={handleChange}
-                            autoComplete="username"
-                        />
-                        <label className="form-label">Username or Email</label>
-                        {errors.identifier && (
-                            <div className="form-error">{errors.identifier}</div>
-                        )}
-                    </div>
-
-                    <div className="form-group">
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                className={`input ${errors.password ? "input-error" : ""}`}
-                                placeholder=" "
-                                value={form.password}
-                                onChange={handleChange}
-                                autoComplete="current-password"
-                            />
-                            <label className="form-label">Password</label>
-                            <button
-                                type="button"
-                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 opacity-60 hover:opacity-100"
-                                onClick={() => setShowPassword(!showPassword)}
-                                tabIndex={-1}
-                            >
-                                {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
-                            </button>
+        <div className="auth-container">
+            <div className="auth-content">
+                <div className="auth-card">
+                    <div className="auth-header">
+                        <div className="auth-logo">
+                            <FaComments />
                         </div>
-                        {errors.password && (
-                            <div className="form-error">{errors.password}</div>
-                        )}
+                        <h1 className="auth-title">Sign In</h1>
+                        <p className="auth-subtitle">Welcome back! Please sign in to continue</p>
                     </div>
 
-                    <button
-                        type="submit"
-                        className="btn btn-primary w-full"
-                        disabled={loading || !form.identifier || !form.password}
-                    >
-                        {loading ? <div className="loading-spinner" /> : "Sign In"}
-                    </button>
+                    <form onSubmit={handleSubmit} className="auth-form">
+                        <div className="form-field">
+                            <input
+                                ref={identifierRef}
+                                name="identifier"
+                                type="text"
+                                className={`auth-input ${errors.identifier ? "error" : ""}`}
+                                placeholder="Username or Email"
+                                value={form.identifier}
+                                onChange={handleChange}
+                                autoComplete="username"
+                            />
+                            {errors.identifier && (
+                                <span className="field-error">{errors.identifier}</span>
+                            )}
+                        </div>
 
-                    <div className="form-footer">
-                        Don't have an account?{" "}
-                        <Link to="/register" className="link">
-                            Sign up
-                        </Link>
+                        <div className="form-field">
+                            <div className="password-field">
+                                <input
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    className={`auth-input ${errors.password ? "error" : ""}`}
+                                    placeholder="Password"
+                                    value={form.password}
+                                    onChange={handleChange}
+                                    autoComplete="current-password"
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    tabIndex={-1}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </button>
+                            </div>
+                            {errors.password && (
+                                <span className="field-error">{errors.password}</span>
+                            )}
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="auth-button"
+                            disabled={loading || !form.identifier || !form.password}
+                        >
+                            {loading ? (
+                                <div className="button-loading">
+                                    <div className="spinner"></div>
+                                    <span>Signing in...</span>
+                                </div>
+                            ) : (
+                                "Sign In"
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="auth-footer">
+                        <p>
+                            Don't have an account?{" "}
+                            <Link to="/register" className="auth-link">
+                                Create one
+                            </Link>
+                        </p>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import { FaTelegram, FaBars } from "react-icons/fa";
+import { FaComments, FaBars } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
 import authStore from "../../store/auth.store";
@@ -18,9 +18,9 @@ function Navbar({ user, onToggleSidebar }) {
 
             <div className="navbar-brand">
                 <div className="navbar-brand-icon">
-                    <FaTelegram size={14} />
+                    <FaComments size={14} />
                 </div>
-                <span className="hidden sm:inline">Telegram</span>
+                <span className="hidden sm:inline">Chat</span>
             </div>
 
             {user && (

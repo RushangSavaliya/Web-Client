@@ -72,7 +72,7 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                     <div className="navbar-brand-icon">
                         <FiUsers size={12} />
                     </div>
-                    <span>Telegram</span>
+                    <span>Contacts</span>
                 </div>
 
                 <button
@@ -106,7 +106,7 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                                     </div>
                                     <div className="contact-status">
                                         <div className={`status-indicator ${online ? "" : "offline"}`} />
-                                        {online ? "online" : "last seen recently"}
+                                        {online ? "online" : "offline"}
                                     </div>
                                 </div>
                             </button>

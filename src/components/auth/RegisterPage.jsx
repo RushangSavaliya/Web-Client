@@ -22,21 +22,23 @@ function RegisterPage() {
         const { username, email, password } = form;
 
         if (!username.trim()) {
-            errs.username = "Required";
+            errs.username = "Username is required";
         } else if (username.length < 3) {
-            errs.username = "Too short";
+            errs.username = "Username must be at least 3 characters";
+        } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            errs.username = "Username can only contain letters, numbers, and underscores";
         }
 
         if (!email.trim()) {
-            errs.email = "Required";
+            errs.email = "Email is required";
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            errs.email = "Invalid email";
+            errs.email = "Please enter a valid email address";
         }
 
         if (!password) {
-            errs.password = "Required";
+            errs.password = "Password is required";
         } else if (password.length < 8) {
-            errs.password = "Too short";
+            errs.password = "Password must be at least 8 characters";
         }
 
         setErrors(errs);
@@ -58,7 +60,7 @@ function RegisterPage() {
         setLoading(true);
         try {
             await axiosInstance.post("/auth/register", form);
-            toast.success("Account created!");
+            toast.success("Account created successfully!");
             navigate("/login");
         } catch (err) {
             toast.error(err.response?.data?.error || "Registration failed");
@@ -68,89 +70,99 @@ function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="form-container">
-                <div className="form-header">
-                    <div className="form-icon">
-                        <FaComments />
-                    </div>
-                    <h1 className="form-title">Sign Up</h1>
-                </div>
-
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <input
-                            ref={usernameRef}
-                            name="username"
-                            className={`input ${errors.username ? "input-error" : ""}`}
-                            placeholder=" "
-                            value={form.username}
-                            onChange={handleChange}
-                            autoComplete="username"
-                        />
-                        <label className="form-label">Username</label>
-                        {errors.username && (
-                            <div className="form-error">{errors.username}</div>
-                        )}
-                    </div>
-
-                    <div className="form-group">
-                        <input
-                            type="email"
-                            name="email"
-                            className={`input ${errors.email ? "input-error" : ""}`}
-                            placeholder=" "
-                            value={form.email}
-                            onChange={handleChange}
-                            autoComplete="email"
-                        />
-                        <label className="form-label">Email</label>
-                        {errors.email && (
-                            <div className="form-error">{errors.email}</div>
-                        )}
-                    </div>
-
-                    <div className="form-group">
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                className={`input ${errors.password ? "input-error" : ""}`}
-                                placeholder=" "
-                                value={form.password}
-                                onChange={handleChange}
-                                autoComplete="new-password"
-                            />
-                            <label className="form-label">Password</label>
-                            <button
-                                type="button"
-                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 opacity-60 hover:opacity-100"
-                                onClick={() => setShowPassword(!showPassword)}
-                                tabIndex={-1}
-                            >
-                                {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
-                            </button>
+        <div className="auth-container">
+            <div className="auth-content">
+                <div className="auth-card">
+                    <div className="auth-header">
+                        <div className="auth-logo">
+                            <FaComments />
                         </div>
-                        {errors.password && (
-                            <div className="form-error">{errors.password}</div>
-                        )}
+                        <h1 className="auth-title">Create Account</h1>
+                        <p className="auth-subtitle">Join us and start messaging today</p>
                     </div>
 
-                    <button
-                        type="submit"
-                        className="btn btn-primary w-full"
-                        disabled={loading || !form.username || !form.email || !form.password}
-                    >
-                        {loading ? <div className="loading-spinner" /> : "Sign Up"}
-                    </button>
+                    <form onSubmit={handleSubmit} className="auth-form">
+                        <div className="form-field">
+                            <input
+                                ref={usernameRef}
+                                name="username"
+                                type="text"
+                                className={`auth-input ${errors.username ? "error" : ""}`}
+                                placeholder="Username"
+                                value={form.username}
+                                onChange={handleChange}
+                                autoComplete="username"
+                            />
+                            {errors.username && (
+                                <span className="field-error">{errors.username}</span>
+                            )}
+                        </div>
 
-                    <div className="form-footer">
-                        Already have an account?{" "}
-                        <Link to="/login" className="link">
-                            Sign in
-                        </Link>
+                        <div className="form-field">
+                            <input
+                                name="email"
+                                type="email"
+                                className={`auth-input ${errors.email ? "error" : ""}`}
+                                placeholder="Email Address"
+                                value={form.email}
+                                onChange={handleChange}
+                                autoComplete="email"
+                            />
+                            {errors.email && (
+                                <span className="field-error">{errors.email}</span>
+                            )}
+                        </div>
+
+                        <div className="form-field">
+                            <div className="password-field">
+                                <input
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    className={`auth-input ${errors.password ? "error" : ""}`}
+                                    placeholder="Password"
+                                    value={form.password}
+                                    onChange={handleChange}
+                                    autoComplete="new-password"
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    tabIndex={-1}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </button>
+                            </div>
+                            {errors.password && (
+                                <span className="field-error">{errors.password}</span>
+                            )}
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="auth-button"
+                            disabled={loading || !form.username || !form.email || !form.password}
+                        >
+                            {loading ? (
+                                <div className="button-loading">
+                                    <div className="spinner"></div>
+                                    <span>Creating account...</span>
+                                </div>
+                            ) : (
+                                "Create Account"
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="auth-footer">
+                        <p>
+                            Already have an account?{" "}
+                            <Link to="/login" className="auth-link">
+                                Sign in
+                            </Link>
+                        </p>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );
