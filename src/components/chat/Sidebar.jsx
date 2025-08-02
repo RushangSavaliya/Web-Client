@@ -70,9 +70,9 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
             <div className="sidebar-header">
                 <div className="sidebar-title">
                     <div className="navbar-brand-icon">
-                        <FiUsers size={14} />
+                        <FiUsers size={12} />
                     </div>
-                    <span>Chats</span>
+                    <span>Telegram</span>
                 </div>
 
                 <button
@@ -80,7 +80,7 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                     className="btn btn-ghost md:hidden"
                     aria-label="Close"
                 >
-                    <FiX size={16} />
+                    <FiX size={18} />
                 </button>
             </div>
 
@@ -102,10 +102,11 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
                                 <div className="contact-info">
                                     <div className="contact-name">
                                         {user.username}
+                                        {self && " (You)"}
                                     </div>
                                     <div className="contact-status">
                                         <div className={`status-indicator ${online ? "" : "offline"}`} />
-                                        {online ? "online" : "offline"}
+                                        {online ? "online" : "last seen recently"}
                                     </div>
                                 </div>
                             </button>

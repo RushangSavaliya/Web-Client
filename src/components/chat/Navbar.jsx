@@ -1,5 +1,5 @@
-import { FaComments, FaBars } from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
+import { FaTelegram, FaBars } from "react-icons/fa";
+import { FiLogOut, FiSettings, FiSearch } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
 import authStore from "../../store/auth.store";
 
@@ -18,15 +18,25 @@ function Navbar({ user, onToggleSidebar }) {
 
             <div className="navbar-brand">
                 <div className="navbar-brand-icon">
-                    <FaComments size={14} />
+                    <FaTelegram size={14} />
                 </div>
-                <span className="hidden sm:inline">ChatApp</span>
+                <span className="hidden sm:inline">Telegram</span>
             </div>
 
             {user && (
                 <div className="navbar-actions">
-                    <span className="hidden sm:inline text-sm">{user.username}</span>
+                    <button className="btn btn-ghost hidden sm:flex" aria-label="Search">
+                        <FiSearch size={16} />
+                    </button>
+
+                    <span className="hidden md:inline text-sm font-medium">{user.username}</span>
+
                     <Avatar username={user.username} size="sm" />
+
+                    <button className="btn btn-ghost hidden sm:flex" aria-label="Settings">
+                        <FiSettings size={16} />
+                    </button>
+
                     <button
                         onClick={logout}
                         className="btn btn-ghost"

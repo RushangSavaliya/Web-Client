@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
-import { FiSend } from "react-icons/fi";
+import { FiSend, FiPaperclip, FiSmile } from "react-icons/fi";
 import axiosInstance from "../../lib/axios";
 
 function MessageInput({ receiverId, onSent }) {
@@ -41,15 +41,23 @@ function MessageInput({ receiverId, onSent }) {
     return (
         <div className="chat-input-container">
             <div className="chat-input-wrapper">
+                <button className="btn btn-ghost" aria-label="Attach file">
+                    <FiPaperclip size={18} />
+                </button>
+
                 <input
                     ref={inputRef}
                     className="input"
-                    placeholder="Message"
+                    placeholder="Write a message..."
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     onKeyDown={handleKeyDown}
                     disabled={isSending}
                 />
+
+                <button className="btn btn-ghost" aria-label="Emoji">
+                    <FiSmile size={18} />
+                </button>
 
                 <button
                     onClick={handleSend}
@@ -60,7 +68,7 @@ function MessageInput({ receiverId, onSent }) {
                     {isSending ? (
                         <div className="loading-spinner" />
                     ) : (
-                        <FiSend size={14} />
+                        <FiSend size={16} />
                     )}
                 </button>
             </div>

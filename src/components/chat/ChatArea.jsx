@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { BsChatDots } from "react-icons/bs";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiMoreVertical } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
@@ -62,7 +62,7 @@ function ChatArea({ selectedUser, onBack }) {
                     <div className="empty-state-icon">
                         <BsChatDots />
                     </div>
-                    <h2 className="empty-state-title">Select a chat</h2>
+                    <h2 className="empty-state-title">Select a chat to start messaging</h2>
                 </div>
             </div>
         );
@@ -76,14 +76,22 @@ function ChatArea({ selectedUser, onBack }) {
                     className="btn btn-ghost md:hidden"
                     aria-label="Back"
                 >
-                    <FiArrowLeft size={16} />
+                    <FiArrowLeft size={18} />
                 </button>
 
                 <Avatar username={selectedUser.username} />
 
                 <div className="flex-1 min-w-0">
-                    <div className="font-medium">{selectedUser.username}</div>
+                    <div className="contact-name">{selectedUser.username}</div>
+                    <div className="contact-status">
+                        <div className="status-indicator" />
+                        online
+                    </div>
                 </div>
+
+                <button className="btn btn-ghost" aria-label="More options">
+                    <FiMoreVertical size={18} />
+                </button>
             </header>
 
             <MessageList
