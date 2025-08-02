@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { BsChatDots } from "react-icons/bs";
-import { FiArrowLeft, FiMoreVertical } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
@@ -88,10 +88,6 @@ function ChatArea({ selectedUser, onBack }) {
                         online
                     </div>
                 </div>
-
-                <button className="btn btn-ghost" aria-label="More options">
-                    <FiMoreVertical size={18} />
-                </button>
             </header>
 
             <MessageList
