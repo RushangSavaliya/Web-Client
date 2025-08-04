@@ -3,10 +3,11 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import ChatArea from "./ChatArea";
 import authStore from "../../store/auth.store";
+import useUserStore from "../../store/user.store";
 
 function HomePage() {
     const { user } = authStore();
-    const [selectedUser, setSelectedUser] = useState(null);
+    const { onlineUsers } = useUserStore(); const [selectedUser, setSelectedUser] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // Close sidebar when user is selected on mobile
@@ -76,6 +77,7 @@ function HomePage() {
                 <ChatArea
                     selectedUser={selectedUser}
                     onBack={handleBack}
+                    onlineUsers={onlineUsers}
                 />
             </div>
         </div>

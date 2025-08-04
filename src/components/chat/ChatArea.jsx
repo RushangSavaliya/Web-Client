@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import toast from "react-hot-toast";
 import { BsChatDots } from "react-icons/bs";
 import { FiArrowLeft } from "react-icons/fi";
@@ -9,7 +9,7 @@ import axiosInstance from "../../lib/axios";
 import socket from "../../lib/socket";
 import authStore from "../../store/auth.store";
 
-function ChatArea({ selectedUser, onBack }) {
+function ChatArea({ selectedUser, onBack, onlineUsers }) {
     const { user } = authStore();
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +55,10 @@ function ChatArea({ selectedUser, onBack }) {
         setMessages((prev) => [...prev, newMessage]);
     };
 
+    const isUserOnline = useMemo(() => {
+        return onlineUsers?.some((u) => u._id === selectedUser?._id);
+    }, [onlineUsers, selectedUser]);
+
     if (!selectedUser) {
         return (
             <div className="chat-area">
@@ -84,8 +88,8 @@ function ChatArea({ selectedUser, onBack }) {
                 <div className="flex-1 min-w-0">
                     <div className="contact-name">{selectedUser.username}</div>
                     <div className="contact-status">
-                        <div className="status-indicator" />
-                        online
+                        <div className={`status-indicator ${isUserOnline ? "" : "offline"}`} />
+                        {isUserOnline ? "online" : "offline"}
                     </div>
                 </div>
             </header>
