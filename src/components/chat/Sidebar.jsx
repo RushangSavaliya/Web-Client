@@ -1,10 +1,12 @@
+// File: src/components/chat/Sidebar.jsx
+
 import { useEffect, useCallback } from "react";
 import { FiUsers, FiX } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
-import authStore from "../../store/auth.store";
-import socket from "../../lib/socket";
-import axiosInstance from "../../lib/axios";
-import useUserStore from "../../store/user.store";
+import authStore from "../../store/authStore";
+import socket from "../../lib/socketClient";
+import axiosInstance from "../../lib/httpClient";
+import useUserStore from "../../store/userStore";
 
 function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
     const { user: currentUser } = authStore();

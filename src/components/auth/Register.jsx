@@ -1,10 +1,12 @@
+// File: src/components/auth/Register.jsx
+
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaComments, FaEye, FaEyeSlash } from "react-icons/fa";
-import axiosInstance from "../../lib/axios";
+import axiosInstance from "../../lib/httpClient";
 
-function RegisterPage() {
+function Register() {
     const [form, setForm] = useState({ username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
@@ -168,4 +170,4 @@ function RegisterPage() {
     );
 }
 
-export default RegisterPage;
+export default Register;

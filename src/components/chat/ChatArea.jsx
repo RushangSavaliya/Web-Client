@@ -1,3 +1,5 @@
+// File: src/components/chat/ChatArea.jsx
+
 import { useEffect, useState, useRef, useMemo } from "react";
 import toast from "react-hot-toast";
 import { BsChatDots } from "react-icons/bs";
@@ -5,9 +7,9 @@ import { FiArrowLeft } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
-import axiosInstance from "../../lib/axios";
-import socket from "../../lib/socket";
-import authStore from "../../store/auth.store";
+import axiosInstance from "../../lib/httpClient";
+import socket from "../../lib/socketClient";
+import authStore from "../../store/authStore";
 
 function ChatArea({ selectedUser, onBack, onlineUsers }) {
     const { user } = authStore();

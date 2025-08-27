@@ -1,7 +1,9 @@
+// File: src/components/chat/MessageInput.jsx
+
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
 import { FiSend } from "react-icons/fi";
-import axiosInstance from "../../lib/axios";
+import axiosInstance from "../../lib/httpClient";
 
 function MessageInput({ receiverId, onSent }) {
     const [content, setContent] = useState("");

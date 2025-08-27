@@ -1,3 +1,5 @@
+// File: src/components/chat/MessageBubble.jsx
+
 function MessageBubble({ message, isOwn }) {
     const formatTime = (timestamp) =>
         new Date(timestamp).toLocaleTimeString([], {

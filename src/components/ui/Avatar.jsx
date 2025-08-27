@@ -1,3 +1,5 @@
+// File: src/components/ui/Avatar.jsx
+
 const Avatar = ({ username, size = "md", className = "" }) => {
     const sizeClass = size === "sm" ? "avatar sm" : "avatar";
 

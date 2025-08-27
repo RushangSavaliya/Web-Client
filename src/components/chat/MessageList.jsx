@@ -1,7 +1,9 @@
+// File: src/components/chat/MessageList.jsx
+
 import { BsChatDots } from "react-icons/bs";
 import MessageBubble from "./MessageBubble";
 
-function MessageList({ messages, isLoading, currentUserId, chatEndRef }) {
+function MessageList({ messages = [], isLoading, currentUserId, chatEndRef }) {
     if (isLoading) {
         return (
             <div className="chat-messages">

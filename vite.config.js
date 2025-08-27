@@ -6,13 +6,13 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  server: {
-    host: true,  // This exposes it to LAN
-    port: 5173,       // Or any port you want
-    allowedHosts: true, // Allow all hosts
-  },
-  plugins: [
-    react(),
-    tailwindcss()
-  ],
+    server: {
+        host: true,  // This exposes it to LAN
+        port: 5173,       // Or any port you want
+        allowedHosts: true, // Allow all hosts
+    },
+    plugins: [
+        react(),
+        tailwindcss()
+    ],
 })

@@ -1,10 +1,12 @@
+// File: src/components/auth/Login.jsx
+
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaComments, FaEye, FaEyeSlash } from "react-icons/fa";
-import axiosInstance from "../../lib/axios";
+import axiosInstance from "../../lib/httpClient";
 
-function LoginPage({ onLogin }) {
+function Login({ onLogin }) {
     const [form, setForm] = useState({ identifier: "", password: "" });
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -141,4 +143,4 @@ function LoginPage({ onLogin }) {
     );
 }
 
-export default LoginPage;
+export default Login;

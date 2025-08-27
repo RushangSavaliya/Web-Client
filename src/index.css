@@ -1,6 +1,7 @@
+/* File: src/index.css */
+
 @import "tailwindcss";
 
-/* Professional Chat UI Variables */
 :root {
     --tg-primary: #0088cc;
     --tg-primary-dark: #006ba3;

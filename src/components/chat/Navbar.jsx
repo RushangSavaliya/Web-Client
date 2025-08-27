@@ -1,7 +1,9 @@
+// File: src/components/chat/Navbar.jsx
+
 import { FaComments, FaBars } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
-import authStore from "../../store/auth.store";
+import authStore from "../../store/authStore";
 
 function Navbar({ user, onToggleSidebar }) {
     const { logout } = authStore();

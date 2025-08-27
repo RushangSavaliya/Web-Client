@@ -1,13 +1,16 @@
+// File: src/components/chat/Home.jsx
+
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import ChatArea from "./ChatArea";
-import authStore from "../../store/auth.store";
-import useUserStore from "../../store/user.store";
+import authStore from "../../store/authStore";
+import useUserStore from "../../store/userStore";
 
-function HomePage() {
+function Home() {
     const { user } = authStore();
-    const { onlineUsers } = useUserStore(); const [selectedUser, setSelectedUser] = useState(null);
+    const { onlineUsers } = useUserStore();
+    const [selectedUser, setSelectedUser] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // Close sidebar when user is selected on mobile
@@ -84,4 +87,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default Home;

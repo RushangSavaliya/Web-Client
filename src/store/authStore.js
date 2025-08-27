@@ -1,6 +1,8 @@
+// File: src/store/authStore.js
+
 import { create } from "zustand";
-import axiosInstance from "../lib/axios";
-import socket from "../lib/socket";
+import axiosInstance from "../lib/httpClient";
+import socket from "../lib/socketClient";
 
 const authStore = create((set, get) => ({
     // State
@@ -20,10 +22,10 @@ const authStore = create((set, get) => ({
             const user = res.data?.user;
             if (user) {
                 set({ user });
-                
+
                 // Connect socket with the new token
                 socket.connect(token);
-                
+
                 console.log("User logged in successfully:", user.username);
                 return true;
             }
@@ -45,10 +47,10 @@ const authStore = create((set, get) => ({
         } finally {
             localStorage.removeItem("token");
             set({ token: null, isLoggedIn: false, user: null });
-            
+
             // Disconnect socket
             socket.disconnect();
-            
+
             console.log("User logged out successfully");
         }
     },

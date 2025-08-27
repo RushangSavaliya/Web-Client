@@ -1,4 +1,4 @@
-// File: src/store/user.store.js
+// File: src/store/userStore.js
 
 import { create } from "zustand";
 
