@@ -3,6 +3,7 @@
 import { FaComments, FaBars } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import Avatar from "../ui/Avatar";
+import ConnectionStatus from "../ui/ConnectionStatus";
 import authStore from "../../store/authStore";
 
 function Navbar({ user, onToggleSidebar }) {
@@ -23,6 +24,7 @@ function Navbar({ user, onToggleSidebar }) {
                     <FaComments size={14} />
                 </div>
                 <span className="hidden sm:inline">Chat</span>
+                <ConnectionStatus />
             </div>
 
             {user && (

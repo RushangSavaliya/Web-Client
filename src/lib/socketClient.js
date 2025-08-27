@@ -6,6 +6,10 @@ class SocketManager {
         this.isConnected = false;
         this.listeners = new Map();
         this.token = null;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.reconnectDelay = 1000;
+        this.shouldReconnect = true;
     }
 
     connect(token) {
@@ -17,23 +21,36 @@ class SocketManager {
         }
 
         this.token = token;
+        this.shouldReconnect = true;
+        this._createConnection();
+    }
+
+    _createConnection() {
         const url = new URL(import.meta.env.VITE_SERVER_URL.replace(/^http/, "ws"));
-        url.searchParams.append("token", token);
+        url.searchParams.append("token", this.token);
 
         try {
             this.socket = new WebSocket(url.toString());
 
             this.socket.onopen = () => {
                 this.isConnected = true;
+                this.reconnectAttempts = 0;
                 console.log("WebSocket connected");
-                this.listeners.forEach(() => {
-                    // No event registration for custom events in WebSocket, handled in onmessage
-                });
             };
 
             this.socket.onclose = (event) => {
                 this.isConnected = false;
                 console.log("WebSocket disconnected:", event.reason);
+                
+                if (this.shouldReconnect && this.reconnectAttempts < this.maxReconnectAttempts) {
+                    this.reconnectAttempts++;
+                    console.log(`Attempting to reconnect... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+                    setTimeout(() => {
+                        if (this.shouldReconnect) {
+                            this._createConnection();
+                        }
+                    }, this.reconnectDelay * this.reconnectAttempts);
+                }
             };
 
             this.socket.onerror = (error) => {
@@ -45,7 +62,9 @@ class SocketManager {
                 try {
                     const { event, data } = JSON.parse(message.data);
                     const callback = this.listeners.get(event);
-                    if (callback) callback(data);
+                    if (callback) {
+                        callback(data);
+                    }
                 } catch (e) {
                     console.warn("WebSocket message parse error:", e);
                 }
@@ -58,6 +77,7 @@ class SocketManager {
     }
 
     disconnect() {
+        this.shouldReconnect = false;
         if (this.socket) {
             this.socket.close();
             this.socket = null;
@@ -75,7 +95,7 @@ class SocketManager {
     }
 
     emit(event, data) {
-        if (this.socket && this.isConnected) {
+        if (this.socket && this.isConnected && this.socket.readyState === WebSocket.OPEN) {
             this.socket.send(JSON.stringify({ event, data }));
         } else {
             console.warn("WebSocket not connected, cannot emit:", event);

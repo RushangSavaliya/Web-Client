@@ -59,7 +59,18 @@ const authStore = create((set, get) => ({
     initializeSocket: () => {
         const { token } = get();
         if (token) {
+            console.log("Initializing socket with token...");
             socket.connect(token);
+            
+            // Add error handling for socket connection
+            socket.on('unauthorized', (data) => {
+                console.error('Socket unauthorized, logging out:', data);
+                get().logout();
+            });
+            
+            socket.on('authorized', () => {
+                console.log('Socket connection authorized');
+            });
         }
     },
 }));

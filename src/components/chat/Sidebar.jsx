@@ -29,16 +29,27 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
             // Always refresh the list from server for accuracy
             socket.emit("getActiveUsers");
         };
+        const handleError = (error) => {
+            console.error("Socket error in Sidebar:", error);
+        };
+        const handleUnauthorized = (data) => {
+            console.error("Socket unauthorized:", data);
+            // Could trigger logout here if needed
+        };
 
         socket.on("active-users", handleActiveUsers);
         socket.on("userOnline", handleUserOnline);
         socket.on("userOffline", handleUserOffline);
+        socket.on("error", handleError);
+        socket.on("unauthorized", handleUnauthorized);
         socket.emit("getActiveUsers");
 
         return () => {
             socket.off("active-users", handleActiveUsers);
             socket.off("userOnline", handleUserOnline);
             socket.off("userOffline", handleUserOffline);
+            socket.off("error", handleError);
+            socket.off("unauthorized", handleUnauthorized);
         };
     }, [setOnlineUsers]);
 

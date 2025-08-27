@@ -45,8 +45,23 @@ function ChatArea({ selectedUser, onBack, onlineUsers }) {
             }
         };
 
+        const handleError = (error) => {
+            console.error("Socket error in ChatArea:", error);
+        };
+
+        const handleUnauthorized = (data) => {
+            console.error("Socket unauthorized in ChatArea:", data);
+        };
+
         socket.on("newMessage", handleNewMessage);
-        return () => socket.off("newMessage", handleNewMessage);
+        socket.on("error", handleError);
+        socket.on("unauthorized", handleUnauthorized);
+        
+        return () => {
+            socket.off("newMessage", handleNewMessage);
+            socket.off("error", handleError);
+            socket.off("unauthorized", handleUnauthorized);
+        };
     }, [selectedUser]);
 
     useEffect(() => {
