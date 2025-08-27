@@ -21,14 +21,13 @@ function Sidebar({ isOpen, selectedUserId, onSelectUser, onClose }) {
 
     useEffect(() => {
         const handleActiveUsers = (users) => setOnlineUsers(users || []);
-        const handleUserOnline = (user) => {
-            setOnlineUsers(prev => {
-                const exists = prev.find(u => u._id === user._id);
-                return exists ? prev : [...prev, user];
-            });
+        const handleUserOnline = () => {
+            // Always refresh the list from server for accuracy
+            socket.emit("getActiveUsers");
         };
-        const handleUserOffline = (userId) => {
-            setOnlineUsers(prev => prev.filter(u => u._id !== userId));
+        const handleUserOffline = () => {
+            // Always refresh the list from server for accuracy
+            socket.emit("getActiveUsers");
         };
 
         socket.on("active-users", handleActiveUsers);
